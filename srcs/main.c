@@ -116,7 +116,13 @@ int		check_map(char **map)
 	return (0);
 }
 
-void	move_hero_pos(int dir)
+void	move_counter(t_map *map)
+{
+	map->move_count++;
+	write(1, "Hello\n", 6);
+}
+
+void	move_hero_pos(t_map *map, int dir)
 {
 	if (dir == 1)
 	{
@@ -177,6 +183,33 @@ void	update_hero_pos(t_env *env, t_map *map)
 		handle_hero_move(map, 4);
 		env->up = 0;
 	}
+}
+
+void	move_left(t_map *map, int *left)
+{
+	if (map->map[map->hero_pos[1]][map->hero_pos[0] - 1] != "1")
+	{
+		map->hero_pos[0]--;
+		map->move_count++;
+		if (map->map[map->hero_pos[1]][map->hero_pos[0]] == "C")
+		{
+			map->map[map->hero_pos[1]][map->hero_pos[0]] == "0";
+			map->collectibles++;
+		}
+	}
+	*left = 0;
+}
+
+void	update_hero_pos(t_env *env, t_map *map)
+{
+	if (env->left == 1)
+		move_left(map, &env->left);
+	if (env->right == 1)
+		move_right(map, &env->right);
+	if (env->down == 1)
+		move_down(map, &env->down);
+	if (env->up == 1)
+		move_up(map, &env->up);
 }
 
 void			draw_image(t_env *env, t_data *data, unsigned int **tab)
@@ -240,7 +273,7 @@ void	check_arg(t_env *env, int argc, char **argv)
 		env->conf->is_bmp = 0;
 }
 
-void	check_args(t_env env)
+void	check_args(int argc, t_env env)
 {
 	if (argc != 2)
 		ft_error("Error: Program must be launched with 2 arguments\n", env);

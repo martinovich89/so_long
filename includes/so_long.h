@@ -50,6 +50,7 @@ typedef struct	s_map
 	char		**map;
 	int			hero_pos[2];
 	size_t		collectibles;
+	size_t		move_count;
 }				t_map;
 
 typedef struct	s_env

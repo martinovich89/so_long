@@ -116,75 +116,6 @@ int		check_map(char **map)
 	return (0);
 }
 
-void	move_counter(t_map *map)
-{
-	map->move_count++;
-	write(1, "Hello\n", 6);
-}
-
-void	move_hero_pos(t_map *map, int dir)
-{
-	if (dir == 1)
-	{
-		map->hero_pos[0]--;
-		map->move_count++;
-	}
-	if (dir == 2)
-	{
-		map->hero_pos[0]++;
-		map->move_count++;
-	}
-	if (dir == 3)
-	{
-		map->hero_pos[1]--;
-		map->move_count++;
-	}
-	if (dir == 4)
-	{
-		map->hero_pos[1]++;
-		map->move_count++;
-	}
-}
-
-void	handle_hero_move(t_map *map, int dir)
-{
-	map->map[map->hero_pos[1]][map->hero_pos[0]] == "0";
-	move_hero_pos(map, dir);
-	if (map->map[map->hero_pos[1]][map->hero_pos[0]] == "C")
-	{
-		map->map[map->hero_pos[1]][map->hero_pos[0]] == "0";
-		map->collectibles++;
-	}
-}
-
-void	update_hero_pos(t_env *env, t_map *map)
-{
-	if (env->left == 1 && map->hero_pos[0] > 0 &&
-	map->map[map->hero_pos[1]][map->hero_pos[0] - 1] != "1")
-	{
-		handle_hero_move(map, 1);
-		env->left = 0;
-	}
-	if (env->right == 1 && map->hero_pos[0] + 1 < map->width &&
-	map->map[map->hero_pos[1]][map->hero_pos[0] + 1] != "1")
-	{
-		handle_hero_move(map, 2);
-		env->right = 0;
-	}
-	if (env->down == 1 && map->hero_pos[1] + 1 < map->height &&
-	map->map[map->hero_pos[1] + 1][map->hero_pos[0]] != "1")
-	{
-		handle_hero_move(map, 3);
-		env->down = 0;
-	}
-	if (env->up == 1 && map->hero_pos[1] > 0 &&
-	map->map[map->hero_pos[1]][map->hero_pos[0] - 1] != "1")
-	{
-		handle_hero_move(map, 4);
-		env->up = 0;
-	}
-}
-
 void	move_left(t_map *map, int *left)
 {
 	if (map->map[map->hero_pos[1]][map->hero_pos[0] - 1] != "1")
@@ -198,6 +129,51 @@ void	move_left(t_map *map, int *left)
 		}
 	}
 	*left = 0;
+}
+
+void	move_right(t_map *map, int *right)
+{
+	if (map->map[map->hero_pos[1]][map->hero_pos[0] + 1] != "1")
+	{
+		map->hero_pos[0]++;
+		map->move_count++;
+		if (map->map[map->hero_pos[1]][map->hero_pos[0]] == "C")
+		{
+			map->map[map->hero_pos[1]][map->hero_pos[0]] == "0";
+			map->collectibles++;
+		}
+	}
+	*right = 0;
+}
+
+void	move_down(t_map *map, int *down)
+{
+	if (map->map[map->hero_pos[1] + 1][map->hero_pos[0]] != "1")
+	{
+		map->hero_pos[1]++;
+		map->move_count++;
+		if (map->map[map->hero_pos[1]][map->hero_pos[0]] == "C")
+		{
+			map->map[map->hero_pos[1]][map->hero_pos[0]] == "0";
+			map->collectibles++;
+		}
+	}
+	*down = 0;
+}
+
+void	move_up(t_map *map, int *up)
+{
+	if (map->map[map->hero_pos[1] - 1][map->hero_pos[0]] != "1")
+	{
+		map->hero_pos[1]--;
+		map->move_count++;
+		if (map->map[map->hero_pos[1]][map->hero_pos[0]] == "C")
+		{
+			map->map[map->hero_pos[1]][map->hero_pos[0]] == "0";
+			map->collectibles++;
+		}
+	}
+	*up = 0;
 }
 
 void	update_hero_pos(t_env *env, t_map *map)
@@ -217,10 +193,6 @@ void			draw_image(t_env *env, t_data *data, unsigned int **tab)
 	int x;
 	int y;
 
-	draw_background(tab);
-	draw_walls(tab);
-	draw_hero(tab);
-	draw_items(tab);
 	y = 0;
 	while (y < env->conf->res_h)
 	{
@@ -234,10 +206,37 @@ void			draw_image(t_env *env, t_data *data, unsigned int **tab)
 	}
 }
 
+unsigned int	pick_tex_color(t_env *env, size_t i, size_t j)
+{
+	//env->rndr->sheet[i][j] = tex->addr + i % 60 * tex_width * j % 60 * 4;
+}
+
+void	draw_sheet(t_env *env, unsigned int **sheet, t_map *map)
+{
+	size_t i;
+	size_t j;
+
+	i = 0;
+	j = 0;
+	while (i < env->conf->res_h)
+	{
+		j = 0;
+		while (j < env->conf->res_w)
+		{
+			if (j % 60 == 0)
+				next_tex(sheet, i, j);
+			sheet[i][j] == pick_tex_color(env, i, j);
+			j++;
+		}
+		i++;
+	}
+}
+
 int		render_next_frame(t_env *env)
 {
 	reset_sheet(env);
 	update_hero_pos(env, env->map);
+	draw_sheet(env, env->rndr->sheet, env->map);
 	//guards_pos(env);
 	draw_image(env, &env->img, env->rndr->sheet);
 	mlx_put_image_to_window(env->mlx, env->win, env->img.img, 0, 0);
@@ -273,7 +272,7 @@ void	check_arg(t_env *env, int argc, char **argv)
 		env->conf->is_bmp = 0;
 }
 
-void	check_args(int argc, t_env env)
+void	check_args(int argc, t_env *env)
 {
 	if (argc != 2)
 		ft_error("Error: Program must be launched with 2 arguments\n", env);
@@ -294,7 +293,7 @@ void	check_fd(char **argv, t_env *env)
 		ft_error("The file does not exist\n", env);
 	if ((line = (ft_strrchr(argv[1], '.'))) != NULL)
 	{
-		if (ft_strncmp(line, ".cub", 4) != 0)
+		if (ft_strncmp(line, ".ber", 4) != 0)
 			ft_error("Wrong file extension, please use .cub\n", env);
 	}
 	else
@@ -310,6 +309,7 @@ int		main(int argc, char **argv)
 		ft_error("failed to allocate env\n", env);
 //	check_arg(env, argc, argv);
 //	check_fd(argv, env);
+	check_args(argc, env);
 	init_conf(env->conf);
 	if (!(env->conf->file = ft_strdup(argv[1])))
 		ft_error("failed to allocate conf.file\n", env);

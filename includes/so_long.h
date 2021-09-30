@@ -35,7 +35,7 @@ typedef struct		s_conf
 	int				res_w;
 	int				res_h;
 	char			*path_ex;
-	char			*path_he[4];
+	char			**path_he;
 	char			*path_it;
 	char			*path_wa;
 	char			**map;

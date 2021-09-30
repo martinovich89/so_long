@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/17 00:07:02 by martin            #+#    #+#             */
-/*   Updated: 2021/09/30 12:40:58 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/09/30 14:03:15 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,7 +265,7 @@ void	parse_map(t_env *env)
 	size_t i;
 
 	fd = open(env->conf->file, O_RDONLY);
-	i = map_len(fd);
+	env->conf->map_h = map_len(fd);
 	if (set_to_zero(sizeof(char *) * (i + 1), env->conf->map))
 		ft_error("Failed allocation\n", env);
 	i = 0;
@@ -277,6 +277,7 @@ void	parse_map(t_env *env)
 	}
 	if (env->conf->map + i)
 		ft_memdel((void **)env->conf->map + i);
+	env->conf->map_w = ft_strlen(env->conf->map[0]);
 	close(fd);
 }
 

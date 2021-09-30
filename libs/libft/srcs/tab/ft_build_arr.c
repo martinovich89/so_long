@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_error.c                                         :+:      :+:    :+:   */
+/*   ft_build_arr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/16 23:48:34 by martin            #+#    #+#             */
-/*   Updated: 2021/09/30 15:39:11 by mhenry           ###   ########.fr       */
+/*   Created: 2021/09/30 17:56:45 by mhenry            #+#    #+#             */
+/*   Updated: 2021/09/30 18:02:41 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <so_long.h>
+#include "libft.h"
 
-void	ft_puterr(char *str)
+void    ft_build_arr(void ***arr, size_t size, size_t x, size_t y)
 {
-	write(2, str, ft_strlen(str));
-}
+    size_t i;
 
-void	ft_error(char *str, t_env *env)
-{
-	write(2, "error\n", 6);
-	ft_puterr(str);
-	ft_clear_env(env);
-	exit(1);
+    *arr = ft_calloc(x, sizeof(void *));
+    i = 0;
+    while (i < x)
+    {
+        ft_calloc(y, size);
+        i++;
+    }
+    (*arr)[i] = NULL;
 }

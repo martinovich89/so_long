@@ -56,6 +56,7 @@ TAB			= tab/ft_build_uint_tab.c \
 			  tab/ft_tablen.c \
 			  tab/ft_uint_tabdel.c \
 			  tab/ft_uint_tablen.c \
+			  tab/ft_arrdel.c \
 
 SRC_PATH	= ./srcs/
 SRC			= $(DISPLAY) $(CHECK) $(CONVERT) $(MEMORY) $(STRING) $(TAB)

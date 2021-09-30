@@ -9,22 +9,22 @@ PARSING		=
 RENDERING	=	
 
 GNL			=	GNL/get_next_line.c \
-				GNL/get_next_line_utils.c \
+				GNL/get_next_line_utils.c 
 
 UTILS		=	utils/clear.c \
 				utils/save.c \
-				utils/screen.c \
+				utils/screen.c 
 
-ERRORS		=	errors/ft_error.c \
+ERRORS		=	errors/ft_error.c 
 
-INPUTS		=	inputs/inputs.c \
+INPUTS		=	inputs/inputs.c 
 
 INITS		=	inits/allocs.c \
-				inits/inits.c \
+				inits/inits.c 
 
 SRC_PATH	=	./srcs/
 
-SRC			=	errors/ft_error errors/ft_puterr main.c
+SRC			=	errors/ft_error.c main.c
 
 SRCS		=	$(addprefix $(SRC_PATH), $(SRC))
 
@@ -34,31 +34,36 @@ FLAGS		=	-Wall -Wextra -Werror
 
 OBJS		=	$(SRCS:.c=.o)
 
-CC			=	@clang
+CC			=	clang
 
-RM			=	@rm -f
+RM			=	rm -f
 
-all:	$(NAME)
-$(NAME):$(OBJS)
-		@make -C libs/libft
-		@make -C libs/mlx
+all: $(NAME)
+
+$(NAME): $(OBJS)
+		make -C libs/libft
+		make -C libs/mlx
 		$(CC) $(FLAGSD) $(INC) -o $(NAME) $(OBJS) $(LIB)
-		@echo "$(NAME) created"
+		echo "$(NAME) created"
 
 %.o: %.c
 	$(CC) $(FLAGS) $(INC) -o $@ -c $<
 
 clean:
-		@make $@ -C libs/libft
-		@make $@ -C libs/mlx
+		make $@ -C libs/libft
+		make $@ -C libs/mlx
 		$(RM) $(OBJS)
-		@echo "$(OBJS) deleted"
+		echo "$(OBJS) deleted"
 
 fclean: clean
-		@make $@ -C libs/libft
+		make $@ -C libs/libft
 		$(RM) $(NAME)
-		@echo "$(NAME) deleted"
+		echo "$(NAME) deleted"
 
 re:		fclean all
+
+debug:
+	@echo 'INC:$(INC)'
+	@echo 'FLAGS:$(FLAGS)'
 
 .PHONY: all clean fclean re

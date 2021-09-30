@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 12:20:35 by mhenry            #+#    #+#             */
-/*   Updated: 2021/09/29 16:27:06 by user42           ###   ########.fr       */
+/*   Updated: 2021/09/30 17:55:58 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@
 
 # define BUFFER_SIZE 1
 
-void    ft_memdel(void *ptr);
+void    ft_build_arr(void ***arr);
+void    ft_arrdel(void ***arr);
+void    ft_memdel(void **ptr);
 void	ft_uint_strdel(unsigned int *str);
 int		ft_uint_tablen(unsigned int **tab);
 void	ft_uint_tabdel(unsigned int **tab);

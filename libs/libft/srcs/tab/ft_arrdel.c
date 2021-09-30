@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_error.c                                         :+:      :+:    :+:   */
+/*   ft_arrdel.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/16 23:48:34 by martin            #+#    #+#             */
-/*   Updated: 2021/09/30 15:39:11 by mhenry           ###   ########.fr       */
+/*   Created: 2021/09/30 17:18:47 by mhenry            #+#    #+#             */
+/*   Updated: 2021/09/30 17:54:10 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <so_long.h>
+#include "libft.h"
 
-void	ft_puterr(char *str)
+void    ft_arrdel(void ***arr)
 {
-	write(2, str, ft_strlen(str));
-}
+    size_t i;
 
-void	ft_error(char *str, t_env *env)
-{
-	write(2, "error\n", 6);
-	ft_puterr(str);
-	ft_clear_env(env);
-	exit(1);
+    i = 0;
+    while ((*arr)[i])
+    {
+        free((*arr)[i]);
+        (*arr)[i] = NULL;
+        i++;
+    }
+    free(*arr);
+    *arr = NULL;
 }

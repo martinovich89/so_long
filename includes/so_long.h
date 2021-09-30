@@ -1,8 +1,9 @@
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
-# include "get_next_line.h"
 # include "libft.h"
+# include "get_next_line.h"
+# include <mlx.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
@@ -32,15 +33,15 @@ typedef struct		s_rndr
 typedef struct		s_conf
 {
 	char			*file;
-	int				res_w;
-	int				res_h;
+	unsigned int	res_w;
+	unsigned int	res_h;
 	char			*path_ex;
-	char			**path_he;
+	char			*path_he;
 	char			*path_it;
 	char			*path_wa;
 	char			**map;
-	int				map_w;
-	int				map_h;
+	unsigned int	map_w;
+	unsigned int	map_h;
 	int				is_bmp;
 	char			player;
 	int				end_map;
@@ -73,6 +74,7 @@ typedef struct	s_env
 	t_data		img;
 	t_data		tex[4];
 	t_sprite	sp;
+	t_data		*cur_tex;
 	void		*mlx;
 	void		*win;
 	int			left;
@@ -86,5 +88,9 @@ void		ft_error(char *str, t_env *env);
 int			key_press(int keycode, t_env *env);
 int			key_release(int keycode, t_env *env);
 int			close_window(int keycode, t_env *env);
+void		ft_clear_env(t_env *env);
+void		ft_puterr(char *str);
+int			set_to_zero(size_t size, void *ptr);
+
 
 #endif

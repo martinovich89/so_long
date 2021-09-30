@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: martin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/17 00:07:02 by martin            #+#    #+#             */
-/*   Updated: 2020/10/17 00:07:03 by martin           ###   ########.fr       */
+/*   Updated: 2021/09/30 12:40:58 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,11 +243,99 @@ int		render_next_frame(t_env *env)
 	return (0);
 }
 
+int		map_len(int fd)
+{
+	char *line;
+	size_t i;
+
+	while (get_next_line(fd, &line) > 0)
+	{
+		if (line);
+			i++;
+		ft_memdel((void **)&line);
+	}
+	ft_memdel((void **)&line);
+	return (i);
+}
+
+void	parse_map(t_env *env)
+{
+	char *line;
+	int fd;
+	size_t i;
+
+	fd = open(env->conf->file, O_RDONLY);
+	i = map_len(fd);
+	if (set_to_zero(sizeof(char *) * (i + 1), env->conf->map))
+		ft_error("Failed allocation\n", env);
+	i = 0;
+	while (get_next_line(fd, env->conf->map + i) > 0)
+	{
+		if (!env->conf->map[i])
+			ft_error("Failed allocation\n", env);
+		i++;
+	}
+	if (env->conf->map + i)
+		ft_memdel((void **)env->conf->map + i);
+	close(fd);
+}
+
+void	set_conf(t_env *env)
+{
+	env->conf->res_h = env->conf->map_h * 50;
+	env->conf->res_w = env->conf->map_w * 50;
+	set_player_pos(env->conf->map, env->map->hero_pos);
+	env->conf->path_he = (char *[4]){
+		"textures/Hero1.xpm", "textures/Hero2.xpm",
+		"textures/Hero3.xpm", "textures/Hero4.xpm"};
+	env->conf->path_ex = "textures/Exit.xpm";
+	env->conf->path_wa = "textures/Wall.xpm";
+	env->conf->path_it = "textures/Item.xpm";
+	
+}
+
+void	my_mlx_init2(t_env *env)
+{
+	env->sp.tex.img = mlx_xpm_file_to_image(
+		env->mlx, env->conf->path_he, &env->sp.tex.w, &env->sp.tex.h);
+	if (!env->sp.tex.img)
+		ft_error("failed to allocate sp.tex.img\n", env);
+	env->sp.tex.addr = mlx_get_data_addr(
+		env->sp.tex.img, &env->sp.tex.bpp,
+			&env->sp.tex.line_length, &env->sp.tex.endian);
+	if (!env->sp.tex.addr)
+		ft_error("failed to allocate sp.tex.addr\n", env);
+	env->rndr->sheet = ft_build_uint_tab(
+		env->conf->res_w, env->conf->res_h);
+	if (!env->rndr->sheet)
+		ft_error("failed to allocate rndr->sheet\n", env);
+}
+
+void	my_mlx_init(t_env *env)
+{
+	if (!(env->mlx = mlx_init()))
+		ft_error("failed to allocate mlx\n", env);
+	env->win = mlx_new_window(env->mlx
+		, env->conf->res_w, env->conf->res_h, "cub3D");
+	if (!env->win)
+		ft_error("failed to allocate win\n", env);
+	env->img.img = mlx_new_image(
+		env->mlx, env->conf->res_w, env->conf->res_h);
+	if (!env->img.img)
+		ft_error("failed to allocate img.img\n", env);
+	env->img.addr = mlx_get_data_addr(
+		env->img.img, &env->img.bpp, &env->img.line_length, &env->img.endian);
+	if (!env->img.addr)
+		ft_error("failed to allocate img.addr\n", env);
+	init_textures(env);
+}
+
 void	launch_game(t_env *env)
 {
-	parse_params(env);
 	parse_map(env);
-	init_player(env);
+	if (check_map(env->conf->map))
+		ft_error("Wrong map", env);
+	set_conf(env);
 	init_mlx(env);
 	mlx_hook(env->win, 2, 1L << 0, key_press, env);
 	mlx_hook(env->win, 3, 1L << 1, key_release, env);
@@ -301,17 +389,29 @@ void	check_fd(char **argv, t_env *env)
 	close(fd);
 }
 
+int		set_to_zero(size_t size, void *ptr)
+{
+	void	*deref;
+
+	deref = *(void **)ptr;
+	deref = ft_calloc(1, size);
+	if (!(deref))
+		return (1);
+	return (0);
+}
+
 int		main(int argc, char **argv)
 {
 	t_env *env;
 
-	if ((env = env_alloc()) == NULL)
+	if (set_to_zero(sizeof(t_env), &env) != 0)
 		ft_error("failed to allocate env\n", env);
-//	check_arg(env, argc, argv);
-//	check_fd(argv, env);
 	check_args(argc, env);
-	init_conf(env->conf);
-	if (!(env->conf->file = ft_strdup(argv[1])))
+	check_fd(argv, env);
+	if (set_to_zero(sizeof(t_conf), &env->conf) != 0)
+		ft_error("failed to allocate env\n", env);
+	env->conf->file = ft_strdup(argv[1]);
+	if (!env->conf->file)
 		ft_error("failed to allocate conf.file\n", env);
 	launch_game(env);
 	ft_clear_env(env);

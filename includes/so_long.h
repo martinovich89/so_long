@@ -1,6 +1,8 @@
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
+# include "get_next_line.h"
+# include "libft.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
@@ -9,6 +11,17 @@
 # include <string.h>
 # include <strings.h>
 # include <sys/stat.h>
+
+typedef struct	s_data
+{
+	void		*img;
+	char		*addr;
+	int			bpp;
+	int			line_length;
+	int			endian;
+	int			w;
+	int			h;
+}				t_data;
 
 typedef struct		s_rndr
 {
@@ -22,15 +35,14 @@ typedef struct		s_conf
 	int				res_w;
 	int				res_h;
 	char			*path_ex;
-	char			*path_he;
-	char			*path_tr;
+	char			*path_he[4];
+	char			*path_it;
 	char			*path_wa;
 	char			**map;
 	int				map_w;
 	int				map_h;
 	int				is_bmp;
 	char			player;
-	char			dir;
 	int				end_map;
 }					t_conf;
 
@@ -70,17 +82,7 @@ typedef struct	s_env
 	int			sprite;
 }				t_env;
 
-typedef struct	s_data
-{
-	void		*img;
-	char		*addr;
-	int			bpp;
-	int			line_length;
-	int			endian;
-	int			w;
-	int			h;
-}				t_data;
-
+void		ft_error(char *str, t_env *env);
 int			key_press(int keycode, t_env *env);
 int			key_release(int keycode, t_env *env);
 int			close_window(int keycode, t_env *env);

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   inputs.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: martin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/17 00:16:45 by martin            #+#    #+#             */
-/*   Updated: 2020/10/17 00:16:47 by martin           ###   ########.fr       */
+/*   Updated: 2021/10/01 13:21:27 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "so_long.h"
 
 int		close_window(int keycode, t_env *env)
 {
@@ -39,16 +39,12 @@ int		key_release(int keycode, t_env *env)
 	{
 		close_window(keycode, env);
 	}
-	if (keycode == 65361)
-		env->left = 0;
-	if (keycode == 65363)
-		env->right = 0;
 	if (keycode == 119)
 		env->up = 0;
 	if (keycode == 97)
-		env->strafe_left = 0;
+		env->left = 0;
 	if (keycode == 100)
-		env->strafe_right = 0;
+		env->right = 0;
 	if (keycode == 115)
 		env->down = 0;
 	return (0);

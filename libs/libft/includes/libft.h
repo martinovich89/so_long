@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 12:20:35 by mhenry            #+#    #+#             */
-/*   Updated: 2021/09/30 17:55:40 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/01 11:24:32 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 # define BUFFER_SIZE 1
 
-void    ft_build_arr(void ***arr);
+int     ft_build_arr(void ***arr, size_t size, size_t x, size_t y);
 void    ft_arrdel(void ***arr);
 void    ft_memdel(void **ptr);
 void	ft_uint_strdel(unsigned int *str);

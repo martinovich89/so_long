@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_error.c                                         :+:      :+:    :+:   */
+/*   get_next_line_utils2.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/16 23:48:34 by martin            #+#    #+#             */
-/*   Updated: 2021/10/01 15:17:39 by mhenry           ###   ########.fr       */
+/*   Created: 2021/04/15 00:03:13 by mhenry            #+#    #+#             */
+/*   Updated: 2021/04/15 00:03:15 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <so_long.h>
+#include "get_next_line.h"
 
-void	ft_puterr(char *str)
+int		gnl_args_check(t_element *lst, char **line, int fd)
 {
-	write(2, str, ft_strlen(str));
-}
-
-void	ft_error(char *str, t_env *env)
-{
-	write(2, "error: ", 6);
-	ft_puterr(str);
-	ft_clear_env(env);
-	exit(1);
+	if (fd < 0 || BUFFER_SIZE <= 0 || !line)
+	{
+		if (lst && lst->data)
+		{
+			free(lst->data);
+			free(lst);
+		}
+		return (-1);
+	}
+	return (0);
 }

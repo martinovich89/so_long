@@ -6,22 +6,26 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 17:56:45 by mhenry            #+#    #+#             */
-/*   Updated: 2021/09/30 18:02:41 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/01 15:29:35 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void    ft_build_arr(void ***arr, size_t size, size_t x, size_t y)
+int     ft_build_arr(void ***arr, size_t size, size_t x, size_t y)
 {
     size_t i;
 
-    *arr = ft_calloc(x, sizeof(void *));
+    *arr = ft_calloc(y + 1, sizeof(void *));
+    if (!*arr)
+        return (1);
     i = 0;
-    while (i < x)
+    while (i < y)
     {
-        ft_calloc(y, size);
+        (*arr)[i] = ft_calloc(x + 1, size);
+        if (!(*arr)[i])
+            return (1);
         i++;
     }
-    (*arr)[i] = NULL;
+    return (0);
 }

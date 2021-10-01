@@ -1,8 +1,8 @@
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
-# include "libft.h"
-# include "get_next_line.h"
+# include <libft.h>
+# include <get_next_line.h>
 # include <mlx.h>
 # include <stdio.h>
 # include <unistd.h>

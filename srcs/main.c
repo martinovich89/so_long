@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/17 00:07:02 by martin            #+#    #+#             */
-/*   Updated: 2021/09/30 17:02:41 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/01 16:10:46 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,16 @@
 void	ft_clear_conf(t_env *env)
 {
 	if (env->conf->map)
-		ft_tabdel((char ***)&env->conf->map);
+	{
+		write(1, "lol\n", 4);
+		ft_arrdel((void ***)&env->conf->map);
+	}
 	if (env->conf->file)
 		ft_memdel((void **)&env->conf->file);
 	if (env->conf->path_he)
 		ft_memdel((void **)&env->conf->path_he);
 	if (env->conf->path_it)
-		ft_memdel((void **)&env->conf->path_it);
+			ft_memdel((void **)&env->conf->path_it);
 	if (env->conf->path_ex)
 		ft_memdel((void **)&env->conf->path_ex);
 	if (env->conf->path_wa)
@@ -48,8 +51,13 @@ void	ft_clear_tex(t_env *env)
 
 void	ft_clear_env(t_env *env)
 {
-	ft_clear_conf(env);
-	ft_clear_tex(env);	
+	if (env)
+	{
+		if (env->conf)
+			ft_clear_conf(env);
+		if (env->tex[0].addr)
+			ft_clear_tex(env);	
+	}
 }
 
 int		map_too_small(char **map)
@@ -333,20 +341,25 @@ int		render_next_frame(t_env *env)
 	return (0);
 }
 
-int		map_len(int fd)
+void	map_len(t_env *env, int fd)
 {
 	char *line;
 	size_t i;
+	size_t max;
 
 	i = 0;
+	max = 0;
 	while (get_next_line(fd, &line) > 0)
 	{
+		if (max < ft_strlen(line))
+			max = ft_strlen(line);
 		if (line)
 			i++;
 		ft_memdel((void **)&line);
 	}
 	ft_memdel((void **)&line);
-	return (i);
+	env->conf->map_h = i;
+	env->conf->map_w = max;
 }
 
 void	parse_map(t_env *env)
@@ -355,10 +368,12 @@ void	parse_map(t_env *env)
 	size_t i;
 
 	fd = open(env->conf->file, O_RDONLY);
-	env->conf->map_h = map_len(fd);
-	if (set_to_zero(sizeof(char *) * (env->conf->map_h + 1), env->conf->map))
+	map_len(env, fd);
+	if (set_to_zero(sizeof(char *) * (env->conf->map_h + 1), &env->conf->map))
 		ft_error("Failed allocation\n", env);
 	i = 0;
+	close(fd);
+	fd = open(env->conf->file, O_RDONLY);
 	while (get_next_line(fd, env->conf->map + i) > 0)
 	{
 		if (!env->conf->map[i])
@@ -367,7 +382,7 @@ void	parse_map(t_env *env)
 	}
 	if (env->conf->map + i)
 		ft_memdel((void **)env->conf->map + i);
-	env->conf->map_w = ft_strlen(env->conf->map[0]);
+	get_next_line(-1, NULL);
 	close(fd);
 }
 
@@ -408,21 +423,44 @@ void	set_conf(t_env *env)
 */
 }
 
-void	my_mlx_init2(t_env *env)
+void	init_textures2(t_env *env)
 {
-	env->sp.tex.img = mlx_xpm_file_to_image(
-		env->mlx, env->conf->path_he, &env->sp.tex.w, &env->sp.tex.h);
-	if (!env->sp.tex.img)
-		ft_error("failed to allocate sp.tex.img\n", env);
-	env->sp.tex.addr = mlx_get_data_addr(
-		env->sp.tex.img, &env->sp.tex.bpp,
-			&env->sp.tex.line_length, &env->sp.tex.endian);
-	if (!env->sp.tex.addr)
-		ft_error("failed to allocate sp.tex.addr\n", env);
-	env->rndr->sheet = ft_build_uint_tab(
-		env->conf->res_w, env->conf->res_h);
-	if (!env->rndr->sheet)
-		ft_error("failed to allocate rndr->sheet\n", env);
+	env->tex[2].img = mlx_xpm_file_to_image(
+		env->mlx, env->conf->path_wa, &env->tex[2].w, &env->tex[2].h);
+	if (!env->tex[2].img)
+		ft_error("failed to allocate tex[2].img\n", env);
+	env->tex[2].addr = mlx_get_data_addr(
+		env->tex[2].img, &env->tex[2].bpp, &env->tex[2].line_length, &env->tex[2].endian);
+	if (!env->tex[2].addr)
+		ft_error("failed to allocate tex[2].addr\n", env);
+	env->tex[3].img = mlx_xpm_file_to_image(
+		env->mlx, env->conf->path_ex, &env->tex[3].w, &env->tex[3].h);
+	if (!env->tex[3].img)
+		ft_error("failed to allocate tex[3].img\n", env);
+	env->tex[3].addr = mlx_get_data_addr(
+		env->tex[3].img, &env->tex[3].bpp, &env->tex[3].line_length, &env->tex[3].endian);
+	if (!env->tex[3].addr)
+		ft_error("failed to allocate tex[3].addr\n", env);
+}
+
+void	init_textures1(t_env *env)
+{
+	env->tex[0].img = mlx_xpm_file_to_image(
+		env->mlx, env->conf->path_he, &env->tex[0].w, &env->tex[0].h);
+	if (!env->tex[0].img)
+		ft_error("failed to allocate tex[0].img\n", env);
+	env->tex[0].addr = mlx_get_data_addr(
+		env->tex[0].img, &env->tex[0].bpp, &env->tex[0].line_length, &env->tex[0].endian);
+	if (!env->tex[0].addr)
+		ft_error("failed to allocate tex[0].addr\n", env);
+	env->tex[1].img = mlx_xpm_file_to_image(
+		env->mlx, env->conf->path_it, &env->tex[1].w, &env->tex[1].h);
+	if (!env->tex[1].img)
+		ft_error("failed to allocate tex[1].img\n", env);
+	env->tex[1].addr = mlx_get_data_addr(
+		env->tex[1].img, &env->tex[1].bpp, &env->tex[1].line_length, &env->tex[1].endian);
+	if (!env->tex[1].addr)
+		ft_error("failed to allocate tex[1].addr\n", env);
 }
 
 void	my_mlx_init(t_env *env)
@@ -441,16 +479,21 @@ void	my_mlx_init(t_env *env)
 		env->img.img, &env->img.bpp, &env->img.line_length, &env->img.endian);
 	if (!env->img.addr)
 		ft_error("failed to allocate img.addr\n", env);
-	init_textures(env);
+	init_textures1(env);
+	init_textures2(env);
+	if (ft_build_arr((void ***)env->rndr->sheet, sizeof(unsigned int), env->conf->map_w, env->conf->map_h))
+		ft_error("failed sheet allocation\n", env);
+	if (!env->rndr->sheet)
+		ft_error("failed to allocate rndr->sheet\n", env);
 }
 
 void	launch_game(t_env *env)
 {
 	parse_map(env);
 	if (check_map(env->conf->map))
-		ft_error("Wrong map", env);
+		ft_error("Wrong map\n", env);
 	set_conf(env);
-	init_mlx(env);
+	my_mlx_init(env);
 	mlx_hook(env->win, 2, 1L << 0, key_press, env);
 	mlx_hook(env->win, 3, 1L << 1, key_release, env);
 	mlx_hook(env->win, 17, 1L << 17, close_window, env);
@@ -478,7 +521,6 @@ void	check_args(int argc, t_env *env)
 {
 	if (argc != 2)
 		ft_error("Error: Program must be launched with 2 arguments\n", env);
-	return (0);
 }
 
 void	check_fd(char **argv, t_env *env)
@@ -505,11 +547,11 @@ void	check_fd(char **argv, t_env *env)
 
 int		set_to_zero(size_t size, void *ptr)
 {
-	void	*deref;
+	void	**deref;
 
-	deref = *(void **)ptr;
-	deref = ft_calloc(1, size);
-	if (!(deref))
+	deref = (void **)ptr;
+	*deref = ft_calloc(1, size);
+	if (!(*deref))
 		return (1);
 	return (0);
 }

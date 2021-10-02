@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <so_long.h>
+#include "so_long.h"
 
 void	ft_puterr(char *str)
 {
@@ -19,7 +19,7 @@ void	ft_puterr(char *str)
 
 void	ft_error(char *str, t_env *env)
 {
-	write(2, "error: ", 6);
+	write(2, "error: ", 7);
 	ft_puterr(str);
 	ft_clear_env(env);
 	exit(1);

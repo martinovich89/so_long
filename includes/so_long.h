@@ -8,10 +8,6 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
-# include <math.h>
-# include <string.h>
-# include <strings.h>
-# include <sys/stat.h>
 
 typedef struct	s_data
 {
@@ -68,23 +64,27 @@ typedef struct	s_map
 
 typedef struct	s_env
 {
-	t_conf		*conf;
-	t_rndr		*rndr;
-	t_map		*map;
-	t_data		img;
-	t_data		tex[4];
-	t_sprite	sp;
-	t_data		*cur_tex;
-	void		*mlx;
-	void		*win;
-	int			left;
-	int			right;
-	int			up;
-	int			down;
-	int			sprite;
+	t_conf			*conf;
+	t_rndr			*rndr;
+	t_map			*map;
+	t_data			img;
+	t_data			tex[4];
+	t_sprite		sp;
+	t_data			*cur_tex;
+	unsigned int	**sheet;
+	int				hero_pos[2];
+	size_t			move_count;
+	void			*mlx;
+	void			*win;
+	int				left;
+	int				right;
+	int				up;
+	int				down;
 }				t_env;
 
 void		ft_error(char *str, t_env *env);
+
+
 int			key_press(int keycode, t_env *env);
 int			key_release(int keycode, t_env *env);
 int			close_window(int keycode, t_env *env);

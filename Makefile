@@ -1,7 +1,6 @@
 NAME		=	so_long
 
-LIB			=	-L./libs -lft -lm -lbsd -lX11 -lXext ./libs/mlx/libmlx.a
-
+LIB			=	-L./libs/libft -lft -L/libs/mlx -lm -lbsd -lX11 -lXext ./libs/mlx/libmlx.a
 INC			=	-I./includes -I./libs/mlx
 
 PARSING		=	
@@ -37,8 +36,6 @@ all: $(NAME)
 $(NAME): $(OBJS)
 		make -C libs/libft
 		make -C libs/mlx
-		cp libs/libft/libft.a libs
-		cp libs/mlx/libmlx.a libs
 		$(CC) $(FLAGSD) $(INC) -o $(NAME) $(OBJS) $(LIB)
 		echo "$(NAME) created"
 

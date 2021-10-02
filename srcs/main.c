@@ -15,10 +15,7 @@
 void	ft_clear_conf(t_env *env)
 {
 	if (env->conf->map)
-	{
-		write(1, "lol\n", 4);
 		ft_arrdel((void ***)&env->conf->map);
-	}
 	if (env->conf->file)
 		ft_memdel((void **)&env->conf->file);
 	if (env->conf->path_he)
@@ -58,25 +55,28 @@ void	ft_clear_env(t_env *env)
 		if (env->tex[0].addr)
 			ft_clear_tex(env);	
 	}
+	free(env);
 }
 
 int		map_too_small(char **map)
 {
 	size_t i;
 	size_t j;
+	size_t count;
 
+	count = 0;
 	i = 0;
 	j = 0;
-	while (map[i][j])
+	while (map[i])
 	{
 		j = 0;
 		while (map[i][j])
 			j++;
-		if (j < 3)
-			return(1);
+		if (j > 2)
+			count++;
 		i++;
 	}
-	return (i < 3);
+	return (count < 3);
 }
 
 int		map_not_rectangular(char **map)
@@ -127,40 +127,38 @@ int		wrong_character(char **map)
 int		not_well_circled(char **map)
 {
 	size_t i;
-	size_t j;
+	size_t width;
 	size_t height;
 
 	i = 0;
-	j = 0;
+	width = ft_strlen(map[0]);
 	while (map[i])
 		i++;
 	height = i;
+	if (!is_charset_str(map[0], "1"))
+		return (1);
 	i = 0;
-	while (map[i] + j)
-	{
-		if (map[i][j] != '1')
-			return (1);
-		j++;
-	}
 	while (i < height - 1)
 	{
-		if (map[i][0] != '1' || map[i][j - 1] != '1')
+		if (map[i][0] != '1' || map[i][width - 1] != '1')
 			return (1);
 		i++;
 	}
+	if (!is_charset_str(map[height - 1], "1"))
+		return (1);
 	return (0);
 }
 
-int		check_map(char **map)
+int		check_map(t_env *env)
 {
-	if (map_too_small(map))
-		return (1);
-	if (map_not_rectangular(map))
-		return (2);
-	if (wrong_character(map))
-		return (3);
-	if (not_well_circled(map))
-		return (4);
+	if (map_too_small(env->conf->map))
+		ft_error("map too small", env);
+	if (map_not_rectangular(env->conf->map))
+		ft_error("map not rectangular", env);
+	if (wrong_character(env->conf->map))
+		ft_error("wrong character in map description", env);
+	if (not_well_circled(env->conf->map))
+		ft_error("map not circled by only character '1'", env);
 	return (0);
 }
 
@@ -264,6 +262,7 @@ void			draw_image(t_env *env, t_data *data, unsigned int **tab)
 
 void	next_tex(t_env *env, size_t i, size_t j)
 {
+	printf("%zu || %zu\n", i, j);
 	if (env->conf->map[i][j] == 'H')
 		env->cur_tex = env->tex + 0;
 	else if (env->conf->map[i][j] == '1')
@@ -298,14 +297,15 @@ void	draw_sheet(t_env *env, unsigned int **sheet)
 
 	i = 0;
 	j = 0;
-	while (i < env->conf->res_h)
+	while (i < env->conf->res_h - 1)
 	{
 		j = 0;
-		while (j < env->conf->res_w)
+		while (j < env->conf->res_w - 1)
 		{
 			if (j % 50 == 0)
 				next_tex(env, i, j);
 			sheet[i][j] = pick_tex_color(env, i / 50, j / 50);
+//			printf("%x | %zu | %zu\n", env->sheet[i][j], i, j);
 			j++;
 		}
 		i++;
@@ -318,12 +318,12 @@ void	reset_sheet(t_env *env)
 	size_t j;
 
 	i = 0;
-	while (i < env->conf->res_h)
+	while (i < env->conf->res_h - 1)
 	{
 		j = 0;
-		while (j < env->conf->res_w)
+		while (j < env->conf->res_w - 1)
 		{
-			env->rndr->sheet[i][j] = 0;
+			env->sheet[i][j] = 0;
 			j++;
 		}
 		i++;
@@ -334,9 +334,9 @@ int		render_next_frame(t_env *env)
 {
 	reset_sheet(env);
 	update_hero_pos(env, env->map);
-	draw_sheet(env, env->rndr->sheet);
+	draw_sheet(env, env->sheet);
 	//guards_pos(env);
-	draw_image(env, &env->img, env->rndr->sheet);
+	draw_image(env, &env->img, env->sheet);
 	mlx_put_image_to_window(env->mlx, env->win, env->img.img, 0, 0);
 	return (0);
 }
@@ -392,15 +392,15 @@ void	set_player_pos(t_env *env)
 	size_t j;
 
 	i = 0;
-	while (i < env->conf->map_h)
+	while (env->conf->map[i])
 	{
 		j = 0;
-		while (j < env->conf->map_w)
+		while (env->conf->map[i][j])
 		{
 			if (env->conf->map[i][j] == 'H')
 			{
-				env->map->hero_pos[0] = j;
-				env->map->hero_pos[1] = i;
+				env->hero_pos[0] = j;
+				env->hero_pos[1] = i;
 			}
 			j++;
 		}
@@ -416,7 +416,7 @@ void	set_conf(t_env *env)
 	env->conf->path_he = "textures/Hero1.xpm";
 	env->conf->path_ex = "textures/Exit.xpm";
 	env->conf->path_wa = "textures/Wall.xpm";
-	env->conf->path_it = "textures/Item.xpm";
+	env->conf->path_it = "textures/Treasure.xpm";
 /*	env->conf->path_he = (char *[4]){
 		"textures/Hero1.xpm", "textures/Hero2.xpm",
 		"textures/Hero3.xpm", "textures/Hero4.xpm"};
@@ -481,16 +481,16 @@ void	my_mlx_init(t_env *env)
 		ft_error("failed to allocate img.addr\n", env);
 	init_textures1(env);
 	init_textures2(env);
-	if (ft_build_arr((void ***)env->rndr->sheet, sizeof(unsigned int), env->conf->map_w, env->conf->map_h))
+	if (ft_build_arr((void ***)&env->sheet, sizeof(unsigned int), env->conf->res_w, env->conf->res_h))
 		ft_error("failed sheet allocation\n", env);
-	if (!env->rndr->sheet)
+	if (!env->sheet)
 		ft_error("failed to allocate rndr->sheet\n", env);
 }
 
 void	launch_game(t_env *env)
 {
 	parse_map(env);
-	if (check_map(env->conf->map))
+	if (check_map(env))
 		ft_error("Wrong map\n", env);
 	set_conf(env);
 	my_mlx_init(env);

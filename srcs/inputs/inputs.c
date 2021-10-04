@@ -12,12 +12,10 @@
 
 #include "so_long.h"
 
-int		close_window(int keycode, t_env *env)
+int		close_window(t_env *env)
 {
-	if (keycode == 65307)
-		ft_clear_env(env);
+	ft_clear_env(env);
 	exit(0);
-	return (keycode);
 }
 
 int		key_press(int keycode, t_env *env)
@@ -36,9 +34,7 @@ int		key_press(int keycode, t_env *env)
 int		key_release(int keycode, t_env *env)
 {
 	if (keycode == 65307)
-	{
-		close_window(keycode, env);
-	}
+		close_window(env);
 	if (keycode == 119)
 		env->up = 0;
 	if (keycode == 97)

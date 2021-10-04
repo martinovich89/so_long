@@ -87,7 +87,7 @@ void		ft_error(char *str, t_env *env);
 
 int			key_press(int keycode, t_env *env);
 int			key_release(int keycode, t_env *env);
-int			close_window(int keycode, t_env *env);
+int			close_window(t_env *env);
 void		ft_clear_env(t_env *env);
 void		ft_puterr(char *str);
 int			set_to_zero(size_t size, void *ptr);

@@ -18,14 +18,6 @@ void	ft_clear_conf(t_env *env)
 		ft_arrdel((void ***)&env->conf->map);
 	if (env->conf->file)
 		ft_memdel((void **)&env->conf->file);
-	if (env->conf->path_he)
-		ft_memdel((void **)&env->conf->path_he);
-	if (env->conf->path_it)
-			ft_memdel((void **)&env->conf->path_it);
-	if (env->conf->path_ex)
-		ft_memdel((void **)&env->conf->path_ex);
-	if (env->conf->path_wa)
-		ft_memdel((void **)&env->conf->path_wa);
 	if (env->conf)
 		ft_memdel((void **)&env->conf);
 }
@@ -50,12 +42,29 @@ void	ft_clear_env(t_env *env)
 {
 	if (env)
 	{
+		if (env->sheet)
+			ft_arrdel((void ***)&env->sheet);
 		if (env->conf)
 			ft_clear_conf(env);
 		if (env->tex[0].addr)
 			ft_clear_tex(env);	
+		if (env->sp.tex.img)
+			mlx_destroy_image(env->mlx, env->sp.tex.img);
+		if (env->mlx && env->tex[0].img)
+			ft_clear_tex(env);
+		if (env->mlx && env->win && env->img.img)
+			mlx_destroy_image(env->mlx, env->img.img);
+		if (env->mlx && env->win)
+			mlx_destroy_window(env->mlx, env->win);
+		if (env->mlx)
+		{
+			mlx_destroy_display(env->mlx);
+			mlx_loop_end(env->mlx);
+			free(env->mlx);
+			env->mlx = NULL;
+		}
+		free(env);
 	}
-	free(env);
 }
 
 int		map_too_small(char **map)
@@ -262,7 +271,6 @@ void			draw_image(t_env *env, t_data *data, unsigned int **tab)
 
 void	next_tex(t_env *env, size_t i, size_t j)
 {
-	printf("%zu || %zu\n", i, j);
 	if (env->conf->map[i][j] == 'H')
 		env->cur_tex = env->tex + 0;
 	else if (env->conf->map[i][j] == '1')
@@ -303,9 +311,9 @@ void	draw_sheet(t_env *env, unsigned int **sheet)
 		while (j < env->conf->res_w - 1)
 		{
 			if (j % 50 == 0)
-				next_tex(env, i, j);
+				next_tex(env, i / 50, j / 50);
 			sheet[i][j] = pick_tex_color(env, i / 50, j / 50);
-//			printf("%x | %zu | %zu\n", env->sheet[i][j], i, j);
+			printf("%x\n", sheet[i][j]);
 			j++;
 		}
 		i++;
@@ -417,10 +425,6 @@ void	set_conf(t_env *env)
 	env->conf->path_ex = "textures/Exit.xpm";
 	env->conf->path_wa = "textures/Wall.xpm";
 	env->conf->path_it = "textures/Treasure.xpm";
-/*	env->conf->path_he = (char *[4]){
-		"textures/Hero1.xpm", "textures/Hero2.xpm",
-		"textures/Hero3.xpm", "textures/Hero4.xpm"};
-*/
 }
 
 void	init_textures2(t_env *env)

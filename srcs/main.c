@@ -47,9 +47,7 @@ void	ft_clear_env(t_env *env)
 		if (env->conf)
 			ft_clear_conf(env);
 		if (env->tex[0].addr)
-			ft_clear_tex(env);	
-		if (env->sp.tex.img)
-			mlx_destroy_image(env->mlx, env->sp.tex.img);
+			ft_clear_tex(env);
 		if (env->mlx && env->tex[0].img)
 			ft_clear_tex(env);
 		if (env->mlx && env->win && env->img.img)
@@ -171,76 +169,119 @@ int		check_map(t_env *env)
 	return (0);
 }
 
-void	move_left(t_map *map, int *left)
+void	move_left(t_env *env, int *left)
 {
-	if (map->map[map->hero_pos[1]][map->hero_pos[0] - 1] != '1')
+	char *str;
+
+	env->end_level = (
+		env->conf->map[env->hero_pos[1]][env->hero_pos[0] - 1] == 'E');
+	if (env->conf->map[env->hero_pos[1]][env->hero_pos[0] - 1] != '1')
 	{
-		map->hero_pos[0]--;
-		map->move_count++;
-		if (map->map[map->hero_pos[1]][map->hero_pos[0]] == 'C')
+		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
+		env->hero_pos[0]--;
+		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'H' + (
+			env->conf->map[env->hero_pos[1]][env->hero_pos[0] - 1] == 'E');
+		env->move_count++;
+		str = ft_itoa(env->move_count);
+		write(1, "\r", 1);
+		write(1, str, ft_strlen(str));
+		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
-			map->map[map->hero_pos[1]][map->hero_pos[0]] = '0';
-			map->collectibles++;
+			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
+			env->collectibles++;
 		}
 	}
 	*left = 0;
 }
 
-void	move_right(t_map *map, int *right)
+void	move_right(t_env *env, int *right)
 {
-	if (map->map[map->hero_pos[1]][map->hero_pos[0] + 1] != '1')
+	char *str;
+
+	env->end_level = (
+		env->conf->map[env->hero_pos[1]][env->hero_pos[0] + 1] == 'E');
+	if (env->conf->map[env->hero_pos[1]][env->hero_pos[0] + 1] != '1')
 	{
-		map->hero_pos[0]++;
-		map->move_count++;
-		if (map->map[map->hero_pos[1]][map->hero_pos[0]] == 'C')
+		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
+		env->hero_pos[0]++;
+		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'H' + (
+			env->conf->map[env->hero_pos[1]][env->hero_pos[0] + 1] == 'E');
+		env->move_count++;
+		str = ft_itoa(env->move_count);
+		write(1, "\r", 1);
+		write(1, str, ft_strlen(str));
+		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
-			map->map[map->hero_pos[1]][map->hero_pos[0]] = '0';
-			map->collectibles++;
+			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
+			env->collectibles++;
 		}
 	}
 	*right = 0;
 }
 
-void	move_down(t_map *map, int *down)
+void	move_down(t_env *env, int *down)
 {
-	if (map->map[map->hero_pos[1] + 1][map->hero_pos[0]] != '1')
+	char *str;
+
+	env->end_level = (
+		env->conf->map[env->hero_pos[1] + 1][env->hero_pos[0]] == 'E');
+	if (env->conf->map[env->hero_pos[1] + 1][env->hero_pos[0]] != '1')
 	{
-		map->hero_pos[1]++;
-		map->move_count++;
-		if (map->map[map->hero_pos[1]][map->hero_pos[0]] == 'C')
+		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
+		env->hero_pos[1]++;
+		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'H' + (
+			env->conf->map[env->hero_pos[1] + 1][env->hero_pos[0]] == 'E');
+		env->move_count++;
+		str = ft_itoa(env->move_count);
+		write(1, "\r", 1);
+		write(1, str, ft_strlen(str));
+		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
-			map->map[map->hero_pos[1]][map->hero_pos[0]] = '0';
-			map->collectibles++;
+			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
+			env->collectibles++;
 		}
 	}
 	*down = 0;
 }
 
-void	move_up(t_map *map, int *up)
+void	move_up(t_env *env, int *up)
 {
-	if (map->map[map->hero_pos[1] - 1][map->hero_pos[0]] != '1')
+	char *str;
+
+	env->end_level = (
+		env->conf->map[env->hero_pos[1] - 1][env->hero_pos[0]] == 'E');
+	if (env->conf->map[env->hero_pos[1] - 1][env->hero_pos[0]] != '1')
 	{
-		map->hero_pos[1]--;
-		map->move_count++;
-		if (map->map[map->hero_pos[1]][map->hero_pos[0]] == 'C')
+		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
+		env->hero_pos[1]--;
+		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'H' + (
+			env->conf->map[env->hero_pos[1] - 1][env->hero_pos[0]] == 'E');
+		env->move_count++;
+		str = ft_itoa(env->move_count);
+		write(1, "\r", 1);
+		write(1, str, ft_strlen(str));
+		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
-			map->map[map->hero_pos[1]][map->hero_pos[0]] = '0';
-			map->collectibles++;
+			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
+			env->collectibles++;
 		}
 	}
 	*up = 0;
 }
 
-void	update_hero_pos(t_env *env, t_map *map)
+void	update_hero_pos(t_env *env)
 {
-	if (env->left == 1)
-		move_left(map, &env->left);
-	if (env->right == 1)
-		move_right(map, &env->right);
-	if (env->down == 1)
-		move_down(map, &env->down);
-	if (env->up == 1)
-		move_up(map, &env->up);
+	if (!env->end_level)
+	{
+		if (env->left == 1)
+			move_left(env, &env->left);
+		if (env->right == 1)
+			move_right(env, &env->right);
+		if (env->down == 1)
+			move_down(env, &env->down);
+		if (env->up == 1)
+			move_up(env, &env->up);
+	}
 }
 
 void			my_mlx_pixel_put(t_data *data, int x, int y, int color)
@@ -248,8 +289,6 @@ void			my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	char	*dst;
 
 	dst = data->addr + (y * data->line_length + x * (data->bpp / 8));
-	if (color == 0x00980088)
-		color = 0x00808080;
 	*(unsigned int *)dst = color;
 	
 }
@@ -258,6 +297,7 @@ void			draw_image(t_env *env, t_data *data, unsigned int **tab)
 {
 	unsigned int x;
 	unsigned int y;
+	unsigned int color;
 
 	y = 0;
 	while (y < env->conf->res_h)
@@ -265,7 +305,10 @@ void			draw_image(t_env *env, t_data *data, unsigned int **tab)
 		x = 0;
 		while (x < env->conf->res_w)
 		{
-			my_mlx_pixel_put(data, x, y, tab[y][x]);
+			color = tab[y][x];
+			if (env->end_level)
+				color /= 2;
+			my_mlx_pixel_put(data, x, y, color);
 			x++;
 		}
 		y++;
@@ -282,6 +325,8 @@ void	next_tex(t_env *env, size_t i, size_t j)
 		env->cur_tex = env->tex + 2;
 	else if (env->conf->map[i][j] == 'E')
 		env->cur_tex = env->tex + 3;
+	else if (env->conf->map[i][j] == 'I')
+		env->cur_tex = env->tex + 3;
 	else
 		env->cur_tex = NULL;
 }	
@@ -289,16 +334,28 @@ void	next_tex(t_env *env, size_t i, size_t j)
 int		pick_tex_color(t_env *env, size_t i, size_t j)
 {
 	unsigned int color;
-	char *dst;
+	char *src;
 
 	if (!env->cur_tex)
 		color = 0x00808080;
 	else
 	{
-		dst = env->cur_tex->addr + (i * env->cur_tex->line_length + j * env->cur_tex->bpp / 8);
-		color = *(unsigned int *)dst;
+		src = env->cur_tex->addr + (i * env->cur_tex->line_length + j * env->cur_tex->bpp / 8);
+		color = *(unsigned int *)src;
+		if (color == 0x00980088)
+			color = 0x00808080;
 	}
 	return (color);
+}
+
+void	draw_hero_line(t_env *env, size_t i, size_t j)
+{
+	while (j % 50 < 49)
+	{
+		env->cur_tex = env->tex + 0;
+		env->sheet[i][j] = pick_tex_color(env, i % 50, j);
+		j++;
+	}
 }
 
 void	draw_sheet(t_env *env, unsigned int **sheet)
@@ -316,6 +373,8 @@ void	draw_sheet(t_env *env, unsigned int **sheet)
 			if (j % 50 == 0)
 				next_tex(env, i / 50, j / 50);
 			sheet[i][j] = pick_tex_color(env, i % 50, j % 50);
+			if (env->conf->map[i / 50][j / 50] == 'I' && j % 50 == 49)
+				draw_hero_line(env, i, j - 49);
 			j++;
 		}
 		i++;
@@ -343,7 +402,7 @@ void	reset_sheet(t_env *env)
 int		render_next_frame(t_env *env)
 {
 	reset_sheet(env);
-	update_hero_pos(env, env->map);
+	update_hero_pos(env);
 	draw_sheet(env, env->sheet);
 	//guards_pos(env);
 	draw_image(env, &env->img, env->sheet);

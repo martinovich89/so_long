@@ -58,24 +58,22 @@ typedef struct	s_map
 	size_t		height;
 	char		**map;
 	int			hero_pos[2];
-	size_t		collectibles;
 	size_t		move_count;
 }				t_map;
 
 typedef struct	s_env
 {
 	t_conf			*conf;
-	t_rndr			*rndr;
-	t_map			*map;
 	t_data			img;
 	t_data			tex[4];
-	t_sprite		sp;
 	t_data			*cur_tex;
 	unsigned int	**sheet;
 	int				hero_pos[2];
 	size_t			move_count;
+	size_t			collectibles;
 	void			*mlx;
 	void			*win;
+	int				end_level;
 	int				left;
 	int				right;
 	int				up;

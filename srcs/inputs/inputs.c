@@ -20,13 +20,13 @@ int		close_window(t_env *env)
 
 int		key_press(int keycode, t_env *env)
 {
-	if (keycode == 100)
+	if (keycode == 113)
 		env->left = 1;
-	if (keycode == 115)
+	if (keycode == 100)
 		env->right = 1;
-	if (keycode == 119)
+	if (keycode == 122)
 		env->up = 1;
-	if (keycode == 97)
+	if (keycode == 115)
 		env->down = 1;
 	return (0);
 }

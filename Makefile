@@ -1,6 +1,6 @@
 NAME		=	so_long
 
-LIB			=	-L./libs/libft -lft -L./libs/mlx -lm -lX11 -lz -lXext -lmlx
+LIB			=	-L./libs/libft -lft -L./libs/mlx -lm -lX11 -lbsd -lXext -lmlx
 INC			=	-I./includes -I./libs/mlx
 
 PARSING		=	

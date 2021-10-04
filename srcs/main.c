@@ -248,7 +248,10 @@ void			my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	char	*dst;
 
 	dst = data->addr + (y * data->line_length + x * (data->bpp / 8));
-	color = *(unsigned int *)dst;
+	if (color == 0x00980088)
+		color = 0x00808080;
+	*(unsigned int *)dst = color;
+	
 }
 
 void			draw_image(t_env *env, t_data *data, unsigned int **tab)
@@ -273,11 +276,11 @@ void	next_tex(t_env *env, size_t i, size_t j)
 {
 	if (env->conf->map[i][j] == 'H')
 		env->cur_tex = env->tex + 0;
-	else if (env->conf->map[i][j] == '1')
-		env->cur_tex = env->tex + 1;
-	else if (env->conf->map[i][j] == 'E')
-		env->cur_tex = env->tex + 2;
 	else if (env->conf->map[i][j] == 'C')
+		env->cur_tex = env->tex + 1;
+	else if (env->conf->map[i][j] == '1')
+		env->cur_tex = env->tex + 2;
+	else if (env->conf->map[i][j] == 'E')
 		env->cur_tex = env->tex + 3;
 	else
 		env->cur_tex = NULL;
@@ -312,8 +315,7 @@ void	draw_sheet(t_env *env, unsigned int **sheet)
 		{
 			if (j % 50 == 0)
 				next_tex(env, i / 50, j / 50);
-			sheet[i][j] = pick_tex_color(env, i / 50, j / 50);
-			printf("%x\n", sheet[i][j]);
+			sheet[i][j] = pick_tex_color(env, i % 50, j % 50);
 			j++;
 		}
 		i++;

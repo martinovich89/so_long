@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/17 00:07:02 by martin            #+#    #+#             */
-/*   Updated: 2021/10/05 12:21:35 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/05 16:49:00 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,15 @@ int		map_not_rectangular(char **map)
 		j++;
 	width = j;
 	j = 0;
-	while (map[i][j])
+	while (map[i])
 	{
 		j = 0;
 		while (map[i][j])
 			j++;
 		if (j != width)
+		{
 			return (1);
+		}
 		i++;
 	}
 	return (0);
@@ -156,16 +158,44 @@ int		not_well_circled(char **map)
 	return (0);
 }
 
+int		missing_character(char **map)
+{
+	size_t i;
+	size_t j;
+	int a;
+
+	a = 0;
+	i = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+		{
+			if (map[i][j] == 'P' && (a & 0x10))
+        	    return (1);
+        	a |= (map[i][j] == '1') << 0;
+        	a |= (map[i][j] == 'P') << 4;
+        	a |= (map[i][j] == 'C') << 8;
+        	a |= (map[i][j] == 'E') << 12;
+			j++;
+		}
+		i++;
+	}
+	return (a != 0x1111) * a;
+}
+
 int		check_map(t_env *env)
 {
 	if (map_too_small(env->conf->map))
-		ft_error("map too small", env);
+		ft_error("map too small\n", env);
 	if (map_not_rectangular(env->conf->map))
-		ft_error("map not rectangular", env);
+		ft_error("map not rectangular\n", env);
 	if (wrong_character(env->conf->map))
-		ft_error("wrong character in map description", env);
+		ft_error("wrong character in map description\n", env);
+	if (missing_character(env->conf->map))
+		ft_error("map must contain at least : '1', '0', 'P', 'C', 'E' and only one 'P'\n", env);
 	if (not_well_circled(env->conf->map))
-		ft_error("map not circled by only character '1'", env);
+		ft_error("map not circled by only character '1'\n", env);
 	return (0);
 }
 
@@ -179,7 +209,7 @@ void	move_left(t_env *env, int *left)
 	{
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[0]--;
-		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'H' + (
+		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		str = ft_itoa(env->move_count);
@@ -207,7 +237,7 @@ void	move_right(t_env *env, int *right)
 	{
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[0]++;
-		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'H' + (
+		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		str = ft_itoa(env->move_count);
@@ -235,7 +265,7 @@ void	move_down(t_env *env, int *down)
 	{
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[1]++;
-		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'H' + (
+		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		str = ft_itoa(env->move_count);
@@ -263,7 +293,7 @@ void	move_up(t_env *env, int *up)
 	{
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[1]--;
-		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'H' + (
+		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		str = ft_itoa(env->move_count);
@@ -329,7 +359,7 @@ void			draw_image(t_env *env, t_data *data, unsigned int **tab)
 
 void	next_tex(t_env *env, size_t i, size_t j)
 {
-	if (env->conf->map[i][j] == 'H')
+	if (env->conf->map[i][j] == 'P')
 		env->cur_tex = env->tex + 0;
 	else if (env->conf->map[i][j] == 'C')
 		env->cur_tex = env->tex + 1;
@@ -337,7 +367,7 @@ void	next_tex(t_env *env, size_t i, size_t j)
 		env->cur_tex = env->tex + 2;
 	else if (env->conf->map[i][j] == 'E')
 		env->cur_tex = env->tex + 3;
-	else if (env->conf->map[i][j] == 'I')
+	else if (env->conf->map[i][j] == 'Q')
 		env->cur_tex = env->tex + 3;
 	else
 		env->cur_tex = NULL;
@@ -482,7 +512,7 @@ void	set_player_pos(t_env *env)
 		j = 0;
 		while (env->conf->map[i][j])
 		{
-			if (env->conf->map[i][j] == 'H')
+			if (env->conf->map[i][j] == 'P')
 			{
 				env->hero_pos[0] = j;
 				env->hero_pos[1] = i;

@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/17 00:07:02 by martin            #+#    #+#             */
-/*   Updated: 2021/10/01 16:10:46 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/05 12:21:35 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,11 +180,14 @@ void	move_left(t_env *env, int *left)
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[0]--;
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'H' + (
-			env->conf->map[env->hero_pos[1]][env->hero_pos[0] - 1] == 'E');
+			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		str = ft_itoa(env->move_count);
+		if (!str)
+			ft_error("failed allocation", env);
 		write(1, "\r", 1);
 		write(1, str, ft_strlen(str));
+		free(str);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
@@ -205,11 +208,14 @@ void	move_right(t_env *env, int *right)
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[0]++;
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'H' + (
-			env->conf->map[env->hero_pos[1]][env->hero_pos[0] + 1] == 'E');
+			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		str = ft_itoa(env->move_count);
+		if (!str)
+			ft_error("failed allocation", env);
 		write(1, "\r", 1);
 		write(1, str, ft_strlen(str));
+		free(str);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
@@ -230,11 +236,14 @@ void	move_down(t_env *env, int *down)
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[1]++;
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'H' + (
-			env->conf->map[env->hero_pos[1] + 1][env->hero_pos[0]] == 'E');
+			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		str = ft_itoa(env->move_count);
+		if (!str)
+			ft_error("failed allocation", env);
 		write(1, "\r", 1);
 		write(1, str, ft_strlen(str));
+		free(str);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
@@ -255,11 +264,14 @@ void	move_up(t_env *env, int *up)
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[1]--;
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'H' + (
-			env->conf->map[env->hero_pos[1] - 1][env->hero_pos[0]] == 'E');
+			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		str = ft_itoa(env->move_count);
+		if (!str)
+			ft_error("failed allocation", env);
 		write(1, "\r", 1);
 		write(1, str, ft_strlen(str));
+		free(str);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
@@ -335,12 +347,16 @@ int		pick_tex_color(t_env *env, size_t i, size_t j)
 {
 	unsigned int color;
 	char *src;
+	size_t x;
+	size_t y;
 
 	if (!env->cur_tex)
 		color = 0x00808080;
 	else
 	{
-		src = env->cur_tex->addr + (i * env->cur_tex->line_length + j * env->cur_tex->bpp / 8);
+		x = j / 50.0f * env->cur_tex->w;
+		y = (int)((float)i / 50.0f * (float)env->cur_tex->h);
+		src = env->cur_tex->addr + ((y * env->cur_tex->line_length) + (x * env->cur_tex->bpp / 8));
 		color = *(unsigned int *)src;
 		if (color == 0x00980088)
 			color = 0x00808080;
@@ -373,8 +389,8 @@ void	draw_sheet(t_env *env, unsigned int **sheet)
 			if (j % 50 == 0)
 				next_tex(env, i / 50, j / 50);
 			sheet[i][j] = pick_tex_color(env, i % 50, j % 50);
-			if (env->conf->map[i / 50][j / 50] == 'I' && j % 50 == 49)
-				draw_hero_line(env, i, j - 49);
+//			if (env->conf->map[i / 50][j / 50] == 'I' && j % 50 == 49)
+//				draw_hero_line(env, i, j - 49);
 			j++;
 		}
 		i++;

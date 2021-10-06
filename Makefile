@@ -3,9 +3,19 @@ NAME		=	so_long
 LIB			=	-L./libs/libft -lft -L./libs/mlx -lm -lX11 -lbsd -lXext -lmlx
 INC			=	-I./includes -I./libs/mlx
 
-PARSING		=	
+PARSING		=	parsing/parsing.c
 
-RENDERING	=	
+RNDR		=	rndr/image.c
+
+MOVES		=	moves/moves.c
+
+SETTERS		=	setters/setters.c
+
+UTILS		=	utils/clear.c \
+				utils/game_utils.c
+
+CHECKERS	=	checkers/checks.c \
+				checkers/checks_utils.c
 
 GNL			=	get_next_line/get_next_line.c \
 				get_next_line/get_next_line_utils.c \
@@ -15,9 +25,21 @@ ERRORS		=	errors/ft_error.c
 
 INPUTS		=	inputs/inputs.c 
 
+INITS		=	inits/inits.c
+
 SRC_PATH	=	./srcs/
 
-SRC			=	$(GNL) $(ERRORS) $(INPUTS) $(INITS) main.c
+SRC			=	$(GNL) \
+				$(ERRORS) \
+				$(INPUTS) \
+				$(INITS) \
+				$(MOVES) \
+				$(PARSING) \
+				$(RNDR) \
+				$(SETTERS) \
+				$(CHECKERS) \
+				$(UTILS) \
+				main.c
 
 SRCS		=	$(addprefix $(SRC_PATH), $(SRC))
 

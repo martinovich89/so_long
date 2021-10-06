@@ -1,61 +1,99 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rndr_utils.c                                       :+:      :+:    :+:   */
+/*   image.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: martin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/17 00:28:37 by martin            #+#    #+#             */
-/*   Updated: 2020/10/17 00:28:38 by martin           ###   ########.fr       */
+/*   Created: 2021/10/06 14:00:36 by mhenry            #+#    #+#             */
+/*   Updated: 2021/10/06 14:11:10 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub.h"
+#include "so_long.h"
 
-void			my_mlx_pixel_put(t_data *data, int x, int y, int color)
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
 
 	dst = data->addr + (y * data->line_length + x * (data->bpp / 8));
 	*(unsigned int *)dst = color;
+	
 }
 
-void			reset_sheet(t_env *env)
+void	next_tex(t_env *env, size_t i, size_t j)
 {
-	int i;
-	int j;
+	if (env->conf->map[i][j] == 'P')
+		env->cur_tex = env->tex + 0;
+	else if (env->conf->map[i][j] == 'C')
+		env->cur_tex = env->tex + 1;
+	else if (env->conf->map[i][j] == '1')
+		env->cur_tex = env->tex + 2;
+	else if (env->conf->map[i][j] == 'E')
+		env->cur_tex = env->tex + 3;
+	else if (env->conf->map[i][j] == 'Q')
+		env->cur_tex = env->tex + 3;
+	else
+		env->cur_tex = NULL;
+}
 
+static inline int	pick_tex_color(t_env *env, int y, int x)
+{
+	unsigned int color;
+	char *src;
+
+	src = env->cur_tex->addr + (
+		(int)y * env->cur_tex->line_length) + ((int)x * env->cur_tex->bpp / 8);
+	color = *(unsigned int *)src;
+	if (color == 0x00980088)
+		color = 0x00808080;
+	return (color);
+} __attribute__((always_inline))
+
+void	put_end_title(t_env *env)
+{
+	char *ptr;
+	size_t i;
+	size_t j;
+
+	ptr = env->img.addr + (env->conf->res_h / 2 - 13) * env->img.line_length + (env->conf->res_w / 2 - 75) * 4;
 	i = 0;
-	while (i < env->conf->res_h)
+	while (i < (size_t)env->end.h)
 	{
 		j = 0;
-		while (j < env->conf->res_w)
+		while (j < (size_t)env->end.w)
 		{
-			env->rndr->sheet[i][j] = 0;
+			*(unsigned int *)(ptr + i * env->img.line_length + j * env->img.bpp / 8) = *(unsigned int *)(env->end.addr + i * env->end.line_length + j * env->end.bpp / 8);
 			j++;
 		}
 		i++;
 	}
 }
 
-void			draw_image(t_env *env, t_data *data, unsigned int **tab)
+void	draw_image(t_env *env)
 {
-	int x;
-	int y;
+	size_t	i;
+	size_t	j;
+	unsigned int color;
 
-	draw_background(tab);
-	draw_walls(tab);
-	draw_hero(tab);
-	draw_items(tab);
-	y = 0;
-	while (y < env->conf->res_h)
+	i = 0;
+	while (i < env->conf->res_h - 1)
 	{
-		x = 0;
-		while (x < env->conf->res_w)
+		j = 0;
+		while (j < env->conf->res_w - 1)
 		{
-			my_mlx_pixel_put(data, x, y, tab[y][x]);
-			x++;
+			if (j % 50 == 0)
+				next_tex(env, i / 50, j / 50);
+			if (!env->cur_tex)
+				color = 0x00808080;
+			else
+				color = pick_tex_color(env, i % 50, j % 50);
+			if (env->end_level)
+				color /= 2;
+			*(unsigned int *)(env->img.addr + (
+				i * env->img.line_length + j * (env->img.bpp / 8))) = color;
+			j++;
 		}
-		y++;
+		i++;
 	}
 }

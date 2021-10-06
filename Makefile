@@ -5,7 +5,8 @@ INC			=	-I./includes -I./libs/mlx
 
 PARSING		=	parsing/parsing.c
 
-RNDR		=	rndr/image.c
+RNDR		=	rndr/image.c \
+				rndr/image_utils.c
 
 MOVES		=	moves/moves.c
 

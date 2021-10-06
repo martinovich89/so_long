@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 14:04:28 by mhenry            #+#    #+#             */
-/*   Updated: 2021/10/06 14:27:15 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/07 00:15:56 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	move_left(t_env *env, int *left)
 				env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		display_move_count(env);
+		next_hero(env);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
@@ -45,6 +46,7 @@ void	move_right(t_env *env, int *right)
 				env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		display_move_count(env);
+		next_hero(env);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
@@ -66,6 +68,7 @@ void	move_down(t_env *env, int *down)
 				env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		display_move_count(env);
+		next_hero(env);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
@@ -87,6 +90,7 @@ void	move_up(t_env *env, int *up)
 				env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		display_move_count(env);
+		next_hero(env);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';

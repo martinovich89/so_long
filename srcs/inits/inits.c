@@ -6,11 +6,39 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 13:07:56 by mhenry            #+#    #+#             */
-/*   Updated: 2021/10/06 14:32:44 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/07 00:42:10 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+void	init_textures3(t_env *env)
+{
+	env->tex[4].img = mlx_xpm_file_to_image(env->mlx, env->conf->path_he2,
+			&env->tex[4].w, &env->tex[4].h);
+	if (!env->tex[4].img)
+		ft_error("failed to allocate tex[4].img\n", env);
+	env->tex[4].addr = mlx_get_data_addr(env->tex[4].img, &env->tex[4].bpp,
+			&env->tex[4].line_length, &env->tex[4].endian);
+	if (!env->tex[4].addr)
+		ft_error("failed to allocate tex[4].addr\n", env);
+	env->tex[5].img = mlx_xpm_file_to_image(env->mlx, env->conf->path_he3,
+			&env->tex[5].w, &env->tex[5].h);
+	if (!env->tex[5].img)
+		ft_error("failed to allocate tex[5].img\n", env);
+	env->tex[5].addr = mlx_get_data_addr(env->tex[5].img, &env->tex[5].bpp,
+			&env->tex[5].line_length, &env->tex[5].endian);
+	if (!env->tex[5].addr)
+		ft_error("failed to allocate tex[5].addr\n", env);
+	env->tex[6].img = mlx_xpm_file_to_image(env->mlx, env->conf->path_he4,
+			&env->tex[6].w, &env->tex[6].h);
+	if (!env->tex[6].img)
+		ft_error("failed to allocate tex[6].img\n", env);
+	env->tex[6].addr = mlx_get_data_addr(env->tex[6].img, &env->tex[6].bpp,
+			&env->tex[6].line_length, &env->tex[6].endian);
+	if (!env->tex[6].addr)
+		ft_error("failed to allocate tex[6].addr\n", env);
+}
 
 void	init_textures2(t_env *env)
 {
@@ -42,7 +70,7 @@ void	init_textures2(t_env *env)
 
 void	init_textures1(t_env *env)
 {
-	env->tex[0].img = mlx_xpm_file_to_image(env->mlx, env->conf->path_he,
+	env->tex[0].img = mlx_xpm_file_to_image(env->mlx, env->conf->path_he1,
 			&env->tex[0].w, &env->tex[0].h);
 	if (!env->tex[0].img)
 		ft_error("failed to allocate tex[0].img\n", env);
@@ -79,9 +107,11 @@ void	my_mlx_init(t_env *env)
 		ft_error("failed to allocate img.addr\n", env);
 	init_textures1(env);
 	init_textures2(env);
+	init_textures3(env);
 	if (ft_build_arr((void ***)&env->sheet, sizeof(unsigned int),
 			env->conf->res_w, env->conf->res_h))
 		ft_error("failed sheet allocation\n", env);
 	if (!env->sheet)
 		ft_error("failed to allocate rndr->sheet\n", env);
+	env->cur_hero = env->tex + 0;
 }

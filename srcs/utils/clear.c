@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 13:21:46 by mhenry            #+#    #+#             */
-/*   Updated: 2021/10/06 14:27:30 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/07 00:40:56 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_clear_tex(t_env *env)
 	size_t	i;
 
 	i = 0;
-	while (i < 4)
+	while (i < 7)
 	{
 		if (env->tex[i].img)
 		{

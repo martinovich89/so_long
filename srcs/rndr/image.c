@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 14:00:36 by mhenry            #+#    #+#             */
-/*   Updated: 2021/10/06 23:36:10 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/07 00:35:33 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,6 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 
 	dst = data->addr + (y * data->line_length + x * (data->bpp / 8));
 	*(unsigned int *)dst = color;
-}
-
-void	next_tex(t_env *env, size_t i, size_t j)
-{
-	if (env->conf->map[i][j] == 'P')
-		env->cur_tex = env->tex + 0;
-	else if (env->conf->map[i][j] == 'C')
-		env->cur_tex = env->tex + 1;
-	else if (env->conf->map[i][j] == '1')
-		env->cur_tex = env->tex + 2;
-	else if (env->conf->map[i][j] == 'E')
-		env->cur_tex = env->tex + 3;
-	else if (env->conf->map[i][j] == 'Q')
-		env->cur_tex = env->tex + 3;
-	else
-		env->cur_tex = NULL;
 }
 
 int	pick_tex_color(t_env *env, int y, int x)

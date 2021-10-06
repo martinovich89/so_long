@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 23:15:27 by mhenry            #+#    #+#             */
-/*   Updated: 2021/10/06 23:46:57 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/07 00:15:16 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ typedef struct s_conf
 	unsigned int	res_w;
 	unsigned int	res_h;
 	char			*path_ex;
-	char			*path_he;
+	char			*path_he1;
+	char			*path_he2;
+	char			*path_he3;
+	char			*path_he4;
 	char			*path_it;
 	char			*path_wa;
 	char			*path_end;
@@ -51,9 +54,10 @@ typedef struct s_env
 {
 	t_conf			*conf;
 	t_data			img;
-	t_data			tex[4];
+	t_data			tex[7];
 	t_data			end;
 	t_data			*cur_tex;
+	t_data			*cur_hero;
 	unsigned int	**sheet;
 	int				hero_pos[2];
 	size_t			move_count;
@@ -61,48 +65,50 @@ typedef struct s_env
 	void			*mlx;
 	void			*win;
 	int				end_level;
+	int				hero_frame;
 	int				left;
 	int				right;
 	int				up;
 	int				down;
 }				t_env;
 
-void				ft_error(char *str, t_env *env);
-int					key_press(int keycode, t_env *env);
-int					key_release(int keycode, t_env *env);
-int					close_window(t_env *env);
-void				ft_clear_env(t_env *env);
-void				ft_puterr(char *str);
-int					check_map(t_env *env);
-void				check_args(int argc, t_env *env);
-void				check_fd(char **argv, t_env *env);
-int					missing_character(char **map);
-void				my_mlx_init(t_env *env);
-void				init_textures1(t_env *env);
-void				init_textures2(t_env *env);
-int					not_well_circled(char **map);
-int					wrong_character(char **map);
-int					map_not_rectangular(char **map);
-int					map_too_small(char **map);
-void				ft_clear_env(t_env *env);
-void				ft_clear_tex(t_env *env);
-void				ft_clear_conf(t_env *env);
-void				display_move_count(t_env *env);
-void				parse_map(t_env *env);
-void				map_len(t_env *env, int fd);
-int					set_to_zero(size_t size, void *ptr);
-void				set_conf(t_env *env);
-void				set_player_pos(t_env *env);
-void				put_end_title(t_env *env);
-void				draw_image(t_env *env);
-void				my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void				next_tex(t_env *env, size_t i, size_t j);
-int					pick_tex_color(t_env *env, int y, int x);
-void				put_end_title(t_env *env);
-void				update_hero_pos(t_env *env);
-void				move_up(t_env *env, int *up);
-void				move_down(t_env *env, int *down);
-void				move_right(t_env *env, int *right);
-void				move_left(t_env *env, int *left);
+void	ft_error(char *str, t_env *env);
+int		key_press(int keycode, t_env *env);
+int		key_release(int keycode, t_env *env);
+int		close_window(t_env *env);
+void	ft_clear_env(t_env *env);
+void	ft_puterr(char *str);
+int		check_map(t_env *env);
+void	check_args(int argc, t_env *env);
+void	check_fd(char **argv, t_env *env);
+int		missing_character(char **map);
+void	my_mlx_init(t_env *env);
+void	init_textures1(t_env *env);
+void	init_textures2(t_env *env);
+int		not_well_circled(char **map);
+int		wrong_character(char **map);
+int		map_not_rectangular(char **map);
+int		map_too_small(char **map);
+void	ft_clear_env(t_env *env);
+void	ft_clear_tex(t_env *env);
+void	ft_clear_conf(t_env *env);
+void	display_move_count(t_env *env);
+void	parse_map(t_env *env);
+void	map_len(t_env *env, int fd);
+int		set_to_zero(size_t size, void *ptr);
+void	set_conf(t_env *env);
+void	set_player_pos(t_env *env);
+void	put_end_title(t_env *env);
+void	draw_image(t_env *env);
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void	next_tex(t_env *env, size_t i, size_t j);
+void	next_hero(t_env *env);
+int		pick_tex_color(t_env *env, int y, int x);
+void	put_end_title(t_env *env);
+void	update_hero_pos(t_env *env);
+void	move_up(t_env *env, int *up);
+void	move_down(t_env *env, int *down);
+void	move_right(t_env *env, int *right);
+void	move_left(t_env *env, int *left);
 
 #endif

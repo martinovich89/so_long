@@ -35,6 +35,7 @@ typedef struct		s_conf
 	char			*path_he;
 	char			*path_it;
 	char			*path_wa;
+	char			*path_end;
 	char			**map;
 	unsigned int	map_w;
 	unsigned int	map_h;
@@ -66,6 +67,7 @@ typedef struct	s_env
 	t_conf			*conf;
 	t_data			img;
 	t_data			tex[4];
+	t_data			end;
 	t_data			*cur_tex;
 	unsigned int	**sheet;
 	int				hero_pos[2];

@@ -14,6 +14,8 @@
 
 int		close_window(t_env *env)
 {
+	if (env->move_count)
+		write(1, "\n", 1);
 	ft_clear_env(env);
 	exit(0);
 }

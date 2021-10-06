@@ -48,8 +48,10 @@ void	ft_clear_env(t_env *env)
 			ft_clear_conf(env);
 		if (env->tex[0].addr)
 			ft_clear_tex(env);
-		if (env->mlx && env->tex[0].img)
-			ft_clear_tex(env);
+//		if (env->mlx && env->tex[0].img)
+//			ft_clear_tex(env);
+		if (env->mlx && env->end.addr)
+			mlx_destroy_image(env->mlx, env->end.img);
 		if (env->mlx && env->win && env->img.img)
 			mlx_destroy_image(env->mlx, env->img.img);
 		if (env->mlx && env->win)
@@ -59,7 +61,6 @@ void	ft_clear_env(t_env *env)
 			mlx_destroy_display(env->mlx);
 			mlx_loop_end(env->mlx);
 			free(env->mlx);
-			env->mlx = NULL;
 		}
 		free(env);
 	}
@@ -189,7 +190,7 @@ int		check_map(t_env *env)
 	if (map_too_small(env->conf->map))
 		ft_error("map too small\n", env);
 	if (map_not_rectangular(env->conf->map))
-		ft_error("map not rectangular\n", env);
+		ft_error("map not rectangular. only 1 '\n' allowed after map\n", env);
 	if (wrong_character(env->conf->map))
 		ft_error("wrong character in map description\n", env);
 	if (missing_character(env->conf->map))
@@ -199,10 +200,20 @@ int		check_map(t_env *env)
 	return (0);
 }
 
-void	move_left(t_env *env, int *left)
+void	display_move_count(t_env *env)
 {
 	char *str;
 
+	str = ft_itoa(env->move_count);
+	if (!str)
+		ft_error("failed allocation\n", env);
+	write(1, "\r", 1);
+	write(1, str, ft_strlen(str));
+	free(str);
+}
+
+void	move_left(t_env *env, int *left)
+{
 	env->end_level = (
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0] - 1] == 'E');
 	if (env->conf->map[env->hero_pos[1]][env->hero_pos[0] - 1] != '1')
@@ -212,12 +223,7 @@ void	move_left(t_env *env, int *left)
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
-		str = ft_itoa(env->move_count);
-		if (!str)
-			ft_error("failed allocation", env);
-		write(1, "\r", 1);
-		write(1, str, ft_strlen(str));
-		free(str);
+		display_move_count(env);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
@@ -229,8 +235,6 @@ void	move_left(t_env *env, int *left)
 
 void	move_right(t_env *env, int *right)
 {
-	char *str;
-
 	env->end_level = (
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0] + 1] == 'E');
 	if (env->conf->map[env->hero_pos[1]][env->hero_pos[0] + 1] != '1')
@@ -240,12 +244,7 @@ void	move_right(t_env *env, int *right)
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
-		str = ft_itoa(env->move_count);
-		if (!str)
-			ft_error("failed allocation", env);
-		write(1, "\r", 1);
-		write(1, str, ft_strlen(str));
-		free(str);
+		display_move_count(env);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
@@ -257,8 +256,6 @@ void	move_right(t_env *env, int *right)
 
 void	move_down(t_env *env, int *down)
 {
-	char *str;
-
 	env->end_level = (
 		env->conf->map[env->hero_pos[1] + 1][env->hero_pos[0]] == 'E');
 	if (env->conf->map[env->hero_pos[1] + 1][env->hero_pos[0]] != '1')
@@ -268,12 +265,7 @@ void	move_down(t_env *env, int *down)
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
-		str = ft_itoa(env->move_count);
-		if (!str)
-			ft_error("failed allocation", env);
-		write(1, "\r", 1);
-		write(1, str, ft_strlen(str));
-		free(str);
+		display_move_count(env);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
@@ -285,8 +277,6 @@ void	move_down(t_env *env, int *down)
 
 void	move_up(t_env *env, int *up)
 {
-	char *str;
-
 	env->end_level = (
 		env->conf->map[env->hero_pos[1] - 1][env->hero_pos[0]] == 'E');
 	if (env->conf->map[env->hero_pos[1] - 1][env->hero_pos[0]] != '1')
@@ -296,12 +286,7 @@ void	move_up(t_env *env, int *up)
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
-		str = ft_itoa(env->move_count);
-		if (!str)
-			ft_error("failed allocation", env);
-		write(1, "\r", 1);
-		write(1, str, ft_strlen(str));
-		free(str);
+		display_move_count(env);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
 		{
 			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
@@ -373,26 +358,17 @@ void	next_tex(t_env *env, size_t i, size_t j)
 		env->cur_tex = NULL;
 }	
 
-int		pick_tex_color(t_env *env, size_t i, size_t j)
+static inline int		pick_tex_color(t_env *env, int y, int x)
 {
 	unsigned int color;
 	char *src;
-	size_t x;
-	size_t y;
 
-	if (!env->cur_tex)
+	src = env->cur_tex->addr + ((int)y * env->cur_tex->line_length) + ((int)x * env->cur_tex->bpp / 8);
+	color = *(unsigned int *)src;
+	if (color == 0x00980088)
 		color = 0x00808080;
-	else
-	{
-		x = j / 50.0f * env->cur_tex->w;
-		y = (int)((float)i / 50.0f * (float)env->cur_tex->h);
-		src = env->cur_tex->addr + ((y * env->cur_tex->line_length) + (x * env->cur_tex->bpp / 8));
-		color = *(unsigned int *)src;
-		if (color == 0x00980088)
-			color = 0x00808080;
-	}
 	return (color);
-}
+} __attribute__((always_inline))
 
 void	draw_hero_line(t_env *env, size_t i, size_t j)
 {
@@ -404,13 +380,51 @@ void	draw_hero_line(t_env *env, size_t i, size_t j)
 	}
 }
 
+/*
 void	draw_sheet(t_env *env, unsigned int **sheet)
 {
-	size_t i;
-	size_t j;
+	size_t	i;
+	size_t	j;
+	float	ratio;
+	float	x_pos;
+	float	y_pos;
+
+	(void)sheet;
+	i = 0;
+	while (i < env->conf->res_h - 1)
+	{
+		j = 0;
+		if (i % 50 == 0)
+			y_pos = 0;
+		while (j < env->conf->res_w - 1)
+		{
+			if (j % 50 == 0)
+			{
+				next_tex(env, i / 50, j / 50);
+				if (env->cur_tex)
+				{
+					ratio = 1 / 50.0f * env->cur_tex->w;
+					x_pos = 0;
+					y_pos = (i % 50) / 50.0f * env->cur_tex->w;
+				}
+			}
+			*(unsigned int *)(env->img.addr + (i * env->img.line_length + j * (env->img.bpp / 8))) = pick_tex_color(env, y_pos, x_pos);
+			x_pos += ratio;
+			j++;
+		}
+		i++;
+	}
+}
+*/
+
+
+void	draw_sheet(t_env *env)
+{
+	size_t	i;
+	size_t	j;
+	unsigned int color;
 
 	i = 0;
-	j = 0;
 	while (i < env->conf->res_h - 1)
 	{
 		j = 0;
@@ -418,15 +432,71 @@ void	draw_sheet(t_env *env, unsigned int **sheet)
 		{
 			if (j % 50 == 0)
 				next_tex(env, i / 50, j / 50);
-			sheet[i][j] = pick_tex_color(env, i % 50, j % 50);
-//			if (env->conf->map[i / 50][j / 50] == 'I' && j % 50 == 49)
-//				draw_hero_line(env, i, j - 49);
+			if (!env->cur_tex)
+				color = 0x00808080;
+			else
+				color = pick_tex_color(env, i % 50, j % 50);
+			if (env->end_level)
+				color /= 2;
+			*(unsigned int *)(env->img.addr + (
+				i * env->img.line_length + j * (env->img.bpp / 8))) = color;
 			j++;
 		}
 		i++;
 	}
 }
 
+
+/*
+void	my_mlx_xpm_put(t_env *env, size_t y, size_t x)
+{
+	unsigned int color;
+	size_t base_x;
+
+	y *= 50;
+	x *= 50;
+	base_x = x;
+	while (y < (size_t)env->conf->res_h)
+	{
+		x = base_x;
+		while (x < base_x + 50)
+		{
+			printf("%zu\n", x);
+			if (env->cur_tex)
+				color = *(unsigned int *)(env->cur_tex->addr + y / 50 * env->cur_tex->h * env->cur_tex->line_length + x / 50 * env->cur_tex->w * env->cur_tex->bpp / 8);
+			else
+				color = 0x00808080;
+			*(unsigned int *)(env->img.addr + y * env->img.line_length + x * env->img.bpp / 8) = color;
+			x++;
+		}
+		y++;
+	}
+}
+
+void	draw_sheet(t_env *env)
+{
+	size_t i;
+	size_t j;
+
+	i = 0;
+	while (i < env->conf->map_h - 1)
+	{
+		j = 0;
+		while (j < env->conf->map_w - 1)
+		{
+			if (env->conf->map[i][j] != '0')
+			{
+				my_mlx_xpm_put(env, i, j);
+				next_tex(env, i, j);
+			}
+			j++;
+		}
+		i++;
+	}
+}
+*/
+
+/*
 void	reset_sheet(t_env *env)
 {
 	size_t i;
@@ -438,20 +508,47 @@ void	reset_sheet(t_env *env)
 		j = 0;
 		while (j < env->conf->res_w - 1)
 		{
-			env->sheet[i][j] = 0;
+			env->sheet[i][j] = 0x00808080;
+			j++;
+		}
+		i++;
+	}
+}
+*/
+
+
+void	put_end_title(t_env *env)
+{
+	char *ptr;
+	size_t i;
+	size_t j;
+
+//	printf("%u\n", (env->conf->res_w / 2 - 75));
+	ptr = env->img.addr + (env->conf->res_h / 2 - 13) * env->img.line_length + (env->conf->res_w / 2 - 75) * 4;
+	i = 0;
+	while (i < (size_t)env->end.h)
+	{
+		j = 0;
+		printf("%u\n", env->end.w);
+		while (j < (size_t)env->end.w)
+		{
+			*(unsigned int *)(ptr + i * env->img.line_length + j * env->img.bpp / 8) = *(unsigned int *)(env->end.addr + i * env->end.line_length + j * env->end.bpp / 8);
 			j++;
 		}
 		i++;
 	}
 }
 
+
 int		render_next_frame(t_env *env)
 {
-	reset_sheet(env);
+//	reset_sheet(env);
 	update_hero_pos(env);
-	draw_sheet(env, env->sheet);
+	draw_sheet(env);
 	//guards_pos(env);
-	draw_image(env, &env->img, env->sheet);
+//	draw_image(env, &env->img, env->sheet);
+	if (env->end_level)
+		put_end_title(env);
 	mlx_put_image_to_window(env->mlx, env->win, env->img.img, 0, 0);
 	return (0);
 }
@@ -472,6 +569,8 @@ void	map_len(t_env *env, int fd)
 			i++;
 		ft_memdel((void **)&line);
 	}
+	if (line && line[0])
+		i++;
 	ft_memdel((void **)&line);
 	env->conf->map_h = i;
 	env->conf->map_w = max;
@@ -495,7 +594,7 @@ void	parse_map(t_env *env)
 			ft_error("Failed allocation\n", env);
 		i++;
 	}
-	if (env->conf->map + i)
+	if (env->conf->map + i && !env->conf->map[i][0])
 		ft_memdel((void **)env->conf->map + i);
 	get_next_line(-1, NULL);
 	close(fd);
@@ -532,6 +631,7 @@ void	set_conf(t_env *env)
 	env->conf->path_ex = "textures/Exit.xpm";
 	env->conf->path_wa = "textures/Wall.xpm";
 	env->conf->path_it = "textures/Treasure.xpm";
+	env->conf->path_end = "textures/End.xpm";
 }
 
 void	init_textures2(t_env *env)
@@ -552,6 +652,14 @@ void	init_textures2(t_env *env)
 		env->tex[3].img, &env->tex[3].bpp, &env->tex[3].line_length, &env->tex[3].endian);
 	if (!env->tex[3].addr)
 		ft_error("failed to allocate tex[3].addr\n", env);
+	env->end.img = mlx_xpm_file_to_image(
+		env->mlx, env->conf->path_end, &env->end.w, &env->end.h);
+	if (!env->end.img)
+		ft_error("failed to allocate end.img\n", env);
+	env->end.addr = mlx_get_data_addr(
+		env->end.img, &env->end.bpp, &env->end.line_length, &env->end.endian);
+	if (!env->end.addr)
+		ft_error("failed to allocate end.addr\n", env);
 }
 
 void	init_textures1(t_env *env)
@@ -579,7 +687,7 @@ void	my_mlx_init(t_env *env)
 	if (!(env->mlx = mlx_init()))
 		ft_error("failed to allocate mlx\n", env);
 	env->win = mlx_new_window(env->mlx
-		, env->conf->res_w, env->conf->res_h, "cub3D");
+		, env->conf->res_w, env->conf->res_h, "so_long");
 	if (!env->win)
 		ft_error("failed to allocate win\n", env);
 	env->img.img = mlx_new_image(

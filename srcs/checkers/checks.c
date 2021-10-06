@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 13:13:18 by mhenry            #+#    #+#             */
-/*   Updated: 2021/10/06 13:18:45 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/06 15:23:29 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		check_map(t_env *env)
 	if (map_too_small(env->conf->map))
 		ft_error("map too small\n", env);
 	if (map_not_rectangular(env->conf->map))
-		ft_error("map not rectangular. only 1 '\n' allowed after map\n", env);
+		ft_error("map not rectangular. only 1 '\\n' allowed after map\n", env);
 	if (wrong_character(env->conf->map))
 		ft_error("wrong character in map description\n", env);
 	if (missing_character(env->conf->map))

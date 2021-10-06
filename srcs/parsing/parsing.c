@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 13:47:53 by mhenry            #+#    #+#             */
-/*   Updated: 2021/10/06 13:48:41 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/06 23:20:22 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	map_len(t_env *env, int fd)
 {
-	char *line;
-	size_t i;
-	size_t max;
+	char	*line;
+	size_t	i;
+	size_t	max;
 
 	i = 0;
 	max = 0;
@@ -37,8 +37,8 @@ void	map_len(t_env *env, int fd)
 
 void	parse_map(t_env *env)
 {
-	int fd;
-	size_t i;
+	int		fd;
+	size_t	i;
 
 	fd = open(env->conf->file, O_RDONLY);
 	map_len(env, fd);

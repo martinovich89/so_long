@@ -1,7 +1,0 @@
-rendering system :
-
-Pathable surfaces will be black. Walls will be rendered with textures.
-Like in the map, each cell will be a square.
-
-On prend largeur max.
-On va faire une boucle dans laquelle on va parcourir en largeur l'ecran

@@ -12,11 +12,11 @@
 
 #include "so_long.h"
 
-int		map_too_small(char **map)
+int	map_too_small(char **map)
 {
-	size_t i;
-	size_t j;
-	size_t count;
+	size_t	i;
+	size_t	j;
+	size_t	count;
 
 	count = 0;
 	i = 0;
@@ -33,11 +33,11 @@ int		map_too_small(char **map)
 	return (count < 3);
 }
 
-int		map_not_rectangular(char **map)
+int	map_not_rectangular(char **map)
 {
-	size_t i;
-	size_t j;
-	size_t width;
+	size_t	i;
+	size_t	j;
+	size_t	width;
 
 	i = 0;
 	j = 0;
@@ -59,10 +59,10 @@ int		map_not_rectangular(char **map)
 	return (0);
 }
 
-int		wrong_character(char **map)
+int	wrong_character(char **map)
 {
-	size_t i;
-	size_t j;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
 	j = 0;
@@ -80,11 +80,11 @@ int		wrong_character(char **map)
 	return (0);
 }
 
-int		missing_character(char **map)
+int	missing_character(char **map)
 {
-	size_t i;
-	size_t j;
-	int a;
+	size_t	i;
+	size_t	j;
+	int		a;
 
 	a = 0;
 	i = 0;
@@ -94,23 +94,23 @@ int		missing_character(char **map)
 		while (map[i][j])
 		{
 			if (map[i][j] == 'P' && (a & 0x10))
-        	    return (1);
-        	a |= (map[i][j] == '1') << 0;
-        	a |= (map[i][j] == 'P') << 4;
-        	a |= (map[i][j] == 'C') << 8;
-        	a |= (map[i][j] == 'E') << 12;
+				return (1);
+			a |= (map[i][j] == '1') << 0;
+			a |= (map[i][j] == 'P') << 4;
+			a |= (map[i][j] == 'C') << 8;
+			a |= (map[i][j] == 'E') << 12;
 			j++;
 		}
 		i++;
 	}
-	return (a != 0x1111) * a;
+	return ((a != 0x1111) * a);
 }
 
-int		not_well_circled(char **map)
+int	not_well_circled(char **map)
 {
-	size_t i;
-	size_t width;
-	size_t height;
+	size_t	i;
+	size_t	width;
+	size_t	height;
 
 	i = 0;
 	width = ft_strlen(map[0]);

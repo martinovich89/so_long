@@ -20,20 +20,18 @@ t_element	*ft_getcontent(int fd, t_element **stat)
 
 	lst = *stat;
 	last_element = lst;
-	while (lst)
-	{
-		if (lst->fd == fd)
-			return (lst);
-		last_element = lst;
-		lst = lst->next;
-	}
-	if (!(lst = malloc(sizeof(*lst))))
+	if (loop(&lst, fd, &last_element))
+		return (lst);
+	lst = malloc(sizeof(*lst));
+	if (!lst)
 		return (NULL);
 	lst->fd = fd;
 	lst->next = NULL;
-	if (!(lst->data = ft_substr("", 0, 0)))
+	lst->data = ft_substr("", 0, 0);
+	if (!lst->data)
 		return (NULL);
-	if (!(lst->data = ft_read(lst)))
+	lst->data = ft_read(lst);
+	if (!lst->data)
 		return (NULL);
 	if (last_element)
 		last_element->next = lst;
@@ -42,28 +40,31 @@ t_element	*ft_getcontent(int fd, t_element **stat)
 	return (lst);
 }
 
-char		*ft_read(t_element *curr)
+char	*ft_read(t_element *curr)
 {
 	char	buf[BUFFER_SIZE + 1];
 	char	*tmp;
 
-	while ((curr->ret = read(curr->fd, buf, BUFFER_SIZE)) > 0)
+	curr->ret = read(curr->fd, buf, BUFFER_SIZE);
+	while (curr->ret > 0)
 	{
 		buf[curr->ret] = '\0';
 		tmp = curr->data;
-		if (!(curr->data = ft_strjoin(curr->data, buf)))
+		curr->data = ft_strjoin(curr->data, buf);
+		if (!curr->data)
 			return (NULL);
 		free(tmp);
 		tmp = NULL;
 		if (ft_strchr(buf, '\n'))
 			break ;
+		curr->ret = read(curr->fd, buf, BUFFER_SIZE);
 	}
 	if (curr->ret < 0)
 		return (NULL);
 	return (curr->data);
 }
 
-int			ft_cpytoline(t_element *curr, char **line)
+int	ft_cpytoline(t_element *curr, char **line)
 {
 	char	*tmp;
 	size_t	i;
@@ -73,61 +74,66 @@ int			ft_cpytoline(t_element *curr, char **line)
 	tmp = curr->data;
 	while (curr->data[i] && curr->data[i] != '\n')
 		i++;
-	if (!(*line = ft_substr(curr->data, 0, (i))))
+	*line = ft_substr(curr->data, 0, i);
+	if (!*line)
 		return (0);
 	j = ft_strlen(curr->data);
-	if (!(curr->data = ft_substr(curr->data, i + 1, j - (i + 1))))
+	curr->data = ft_substr(curr->data, i + 1, j - (i + 1));
+	if (!curr->data)
 		return (0);
 	free(tmp);
 	tmp = NULL;
 	return (1);
 }
 
-void		ft_free_elem(t_element *curr, t_element **stat)
+int	ft_free_elem(t_element *curr, t_element **stat, int ret)
 {
 	t_element	*lst;
 
 	lst = *stat;
 	if (curr == *stat)
-		*stat = ((*stat)->next) ? ((*stat)->next) : NULL;
+	{
+		if ((*stat)->next)
+			*stat = (*stat)->next;
+		else
+			*stat = NULL;
+	}
 	else
+	{
 		while (lst)
 		{
 			if (lst->next == curr)
 				lst->next = curr->next;
 			lst = lst->next;
 		}
+	}
 	free(curr->data);
 	curr->data = NULL;
 	free(curr);
 	curr = NULL;
+	return (ret);
 }
 
-int			get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	static t_element	*lst;
 	t_element			*curr;
 
 	if (gnl_args_check(lst, line, fd) == -1)
 		return (-1);
-	if (!(curr = ft_getcontent(fd, &lst)))
+	curr = ft_getcontent(fd, &lst);
+	if (!curr)
 		return (-1);
 	if (!(ft_strchr(curr->data, '\n')) && curr->ret > 0)
-		if (!(curr->data = ft_read(curr)))
-		{
-			ft_free_elem(curr, &lst);
-			return (-1);
-		}
-	if (!(ft_cpytoline(curr, line)))
 	{
-		ft_free_elem(curr, &lst);
-		return (-1);
+		curr->data = ft_read(curr);
+		if (!curr->data)
+			return (ft_free_elem(curr, &lst, -1));
 	}
+	if (!(ft_cpytoline(curr, line)))
+		return (ft_free_elem(curr, &lst, -1));
 	if (curr->ret > 0)
 		return (1);
 	else
-	{
-		ft_free_elem(curr, &lst);
-		return (0);
-	}
+		return (ft_free_elem(curr, &lst, 0));
 }

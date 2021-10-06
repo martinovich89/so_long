@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/06 23:15:27 by mhenry            #+#    #+#             */
+/*   Updated: 2021/10/06 23:46:57 by mhenry           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
@@ -9,24 +21,18 @@
 # include <stdlib.h>
 # include <fcntl.h>
 
-typedef struct	s_data
+typedef struct s_data
 {
-	void		*img;
-	char		*addr;
-	int			bpp;
-	int			line_length;
-	int			endian;
-	int			w;
-	int			h;
+	void	*img;
+	char	*addr;
+	int		bpp;
+	int		line_length;
+	int		endian;
+	int		w;
+	int		h;
 }				t_data;
 
-typedef struct		s_rndr
-{
-	unsigned int	**sheet;
-	t_data			*tex;
-}					t_rndr;
-
-typedef struct		s_conf
+typedef struct s_conf
 {
 	char			*file;
 	unsigned int	res_w;
@@ -39,30 +45,9 @@ typedef struct		s_conf
 	char			**map;
 	unsigned int	map_w;
 	unsigned int	map_h;
-	int				is_bmp;
-	char			player;
-	int				end_map;
 }					t_conf;
 
-typedef	struct	s_sprite
-{
-	t_data	tex;
-	int		pos;
-	float	texposx;
-	float	texposy;
-	float	ratio;	
-}				t_sprite;
-
-typedef struct	s_map
-{
-	size_t		width;
-	size_t		height;
-	char		**map;
-	int			hero_pos[2];
-	size_t		move_count;
-}				t_map;
-
-typedef struct	s_env
+typedef struct s_env
 {
 	t_conf			*conf;
 	t_data			img;
@@ -112,15 +97,12 @@ void				put_end_title(t_env *env);
 void				draw_image(t_env *env);
 void				my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void				next_tex(t_env *env, size_t i, size_t j);
-static inline int	pick_tex_color(t_env *env, int y, int x);
+int					pick_tex_color(t_env *env, int y, int x);
 void				put_end_title(t_env *env);
 void				update_hero_pos(t_env *env);
 void				move_up(t_env *env, int *up);
 void				move_down(t_env *env, int *down);
 void				move_right(t_env *env, int *right);
 void				move_left(t_env *env, int *left);
-
-
-
 
 #endif

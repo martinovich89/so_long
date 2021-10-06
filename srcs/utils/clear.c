@@ -24,7 +24,7 @@ void	ft_clear_conf(t_env *env)
 
 void	ft_clear_tex(t_env *env)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (i < 4)

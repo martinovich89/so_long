@@ -12,7 +12,15 @@
 
 #include "get_next_line.h"
 
-int		gnl_args_check(t_element *lst, char **line, int fd)
+int	ft_ptralloc(void **ptr, size_t size, size_t count)
+{
+	*ptr = malloc(size * (count + 1));
+	if (!*ptr)
+		return (1);
+	return (0);
+}
+
+int	gnl_args_check(t_element *lst, char **line, int fd)
 {
 	if (fd < 0 || BUFFER_SIZE <= 0 || !line)
 	{
@@ -24,4 +32,16 @@ int		gnl_args_check(t_element *lst, char **line, int fd)
 		return (-1);
 	}
 	return (0);
+}
+
+t_element	*loop(t_element **lst, int fd, t_element **last)
+{
+	while (*lst)
+	{
+		if ((*lst)->fd == fd)
+			return (*lst);
+		*last = *lst;
+		*lst = (*lst)->next;
+	}
+	return (NULL);
 }

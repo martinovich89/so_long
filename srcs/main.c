@@ -12,7 +12,7 @@
 
 #include <so_long.h>
 
-int		render_next_frame(t_env *env)
+int	render_next_frame(t_env *env)
 {
 	update_hero_pos(env);
 	draw_image(env);
@@ -36,9 +36,9 @@ void	launch_game(t_env *env)
 	mlx_loop(env->mlx);
 }
 
-int		main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_env *env;
+	t_env	*env;
 
 	if (set_to_zero(sizeof(t_env), &env) != 0)
 		ft_error("failed to allocate env\n", env);

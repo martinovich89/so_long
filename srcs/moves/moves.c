@@ -14,14 +14,14 @@
 
 void	move_left(t_env *env, int *left)
 {
-	env->end_level = (
-		env->conf->map[env->hero_pos[1]][env->hero_pos[0] - 1] == 'E');
+	env->end_level = (env->conf->map[env->hero_pos[1]][env->hero_pos[0] - 1]
+			== 'E');
 	if (env->conf->map[env->hero_pos[1]][env->hero_pos[0] - 1] != '1')
 	{
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[0]--;
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
-			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
+				env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		display_move_count(env);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
@@ -35,14 +35,14 @@ void	move_left(t_env *env, int *left)
 
 void	move_right(t_env *env, int *right)
 {
-	env->end_level = (
-		env->conf->map[env->hero_pos[1]][env->hero_pos[0] + 1] == 'E');
+	env->end_level = (env->conf->map[env->hero_pos[1]][env->hero_pos[0] + 1]
+			== 'E');
 	if (env->conf->map[env->hero_pos[1]][env->hero_pos[0] + 1] != '1')
 	{
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[0]++;
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
-			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
+				env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		display_move_count(env);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
@@ -56,14 +56,14 @@ void	move_right(t_env *env, int *right)
 
 void	move_down(t_env *env, int *down)
 {
-	env->end_level = (
-		env->conf->map[env->hero_pos[1] + 1][env->hero_pos[0]] == 'E');
+	env->end_level = (env->conf->map[env->hero_pos[1] + 1][env->hero_pos[0]]
+			== 'E');
 	if (env->conf->map[env->hero_pos[1] + 1][env->hero_pos[0]] != '1')
 	{
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[1]++;
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
-			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
+				env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		display_move_count(env);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
@@ -77,14 +77,14 @@ void	move_down(t_env *env, int *down)
 
 void	move_up(t_env *env, int *up)
 {
-	env->end_level = (
-		env->conf->map[env->hero_pos[1] - 1][env->hero_pos[0]] == 'E');
+	env->end_level = (env->conf->map[env->hero_pos[1] - 1][env->hero_pos[0]]
+			== 'E');
 	if (env->conf->map[env->hero_pos[1] - 1][env->hero_pos[0]] != '1')
 	{
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[1]--;
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
-			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
+				env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'E');
 		env->move_count++;
 		display_move_count(env);
 		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')

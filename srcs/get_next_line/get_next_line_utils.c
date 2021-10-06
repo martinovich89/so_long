@@ -46,7 +46,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	i = ft_strlen(s1);
 	j = ft_strlen(s2);
-	if (!(str = (char *)malloc((i + j + 1) * sizeof(char))))
+	if (ft_ptralloc((void **)&str, sizeof(char), i + j))
 		return (NULL);
 	i = 0;
 	j = 0;
@@ -73,7 +73,7 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 		return (NULL);
 	else if (ft_strlen(s) < start)
 	{
-		if (!(str = (char *)malloc((1) * sizeof(char))))
+		if (ft_ptralloc((void **)&str, sizeof(char), 0))
 			return (NULL);
 		*str = '\0';
 		return (str);
@@ -81,7 +81,7 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 	else
 	{
 		i = 0;
-		if (!(str = (char *)malloc((len + 1) * sizeof(char))))
+		if (ft_ptralloc((void **)&str, sizeof(char), len))
 			return (NULL);
 		while (i < len)
 		{

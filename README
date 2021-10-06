@@ -1,1 +1,26 @@
-Hello
+so_long is a 2d game.
+
+to start it :
+$> make
+$> ./so_long ./maps/insert_map_file_here
+
+The game will not work if :
+Map file is not valid.
+Textures in ./textures/ are not valid or have wrong names.
+
+A valid map has to :
+- Be circled by '1' characters entirely.
+- Be rectangular.
+- Contain at most 1 '\n' after the last map line.
+- Be made out of '1', '0', 'P', 'C' and 'E' characters only.
+- Have at least 1 'P', 'E' and 'C'.
+- Not have more than 1 'P'.
+
+File description elements :
+- '1' : Wall.
+- '0' : Walkable tile.
+- 'P' : Initial Player position.
+- 'C' : Collectible.
+- 'E' : Exit.
+
+Thank you for playing.

@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/14 02:12:51 by mhenry            #+#    #+#             */
-/*   Updated: 2021/04/14 02:12:54 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/06 23:19:10 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-typedef struct	s_element
+typedef struct s_element
 {
 	char				*data;
 	int					fd;
@@ -27,6 +27,8 @@ typedef struct	s_element
 	struct s_element	*next;
 }				t_element;
 
+int				ft_ptralloc(void **ptr, size_t size, size_t count);
+t_element		*loop(t_element **lst, int fd, t_element **last);
 int				gnl_args_check(t_element *lst, char **line, int fd);
 int				get_next_line(int fd, char **line);
 size_t			ft_strlen(const char *s);
@@ -36,6 +38,6 @@ char			*ft_substr(const char *s, unsigned int start, size_t len);
 char			*ft_read(t_element *curr);
 t_element		*ft_getcontent(int fd, t_element **stat);
 int				ft_cpytoline(t_element *curr, char **line);
-void			ft_free_elem(t_element *curr, t_element **stat);
+int				ft_free_elem(t_element *curr, t_element **stat, int ret);
 
 #endif

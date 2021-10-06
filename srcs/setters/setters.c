@@ -12,7 +12,7 @@
 
 #include "so_long.h"
 
-int		set_to_zero(size_t size, void *ptr)
+int	set_to_zero(size_t size, void *ptr)
 {
 	void	**deref;
 
@@ -23,11 +23,10 @@ int		set_to_zero(size_t size, void *ptr)
 	return (0);
 }
 
-
 void	set_player_pos(t_env *env)
 {
-	size_t i;
-	size_t j;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
 	while (env->conf->map[i])

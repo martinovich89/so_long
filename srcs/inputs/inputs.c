@@ -12,7 +12,7 @@
 
 #include "so_long.h"
 
-int		close_window(t_env *env)
+int	close_window(t_env *env)
 {
 	if (env->move_count)
 		write(1, "\n", 1);
@@ -20,7 +20,7 @@ int		close_window(t_env *env)
 	exit(0);
 }
 
-int		key_press(int keycode, t_env *env)
+int	key_press(int keycode, t_env *env)
 {
 	if (keycode == 113)
 		env->left = 1;
@@ -33,7 +33,7 @@ int		key_press(int keycode, t_env *env)
 	return (0);
 }
 
-int		key_release(int keycode, t_env *env)
+int	key_release(int keycode, t_env *env)
 {
 	if (keycode == 65307)
 		close_window(env);

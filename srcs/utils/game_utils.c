@@ -14,7 +14,7 @@
 
 void	display_move_count(t_env *env)
 {
-	char *str;
+	char	*str;
 
 	str = ft_itoa(env->move_count);
 	if (!str)

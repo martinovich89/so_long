@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_uint_tabdel.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: martin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/16 23:39:57 by martin            #+#    #+#             */
-/*   Updated: 2020/10/16 23:40:20 by martin           ###   ########.fr       */
+/*   Updated: 2021/10/06 17:28:33 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_uint_tabdel(unsigned int **tab)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (tab[i] != NULL)

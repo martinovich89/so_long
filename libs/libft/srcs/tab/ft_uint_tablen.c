@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_uint_tablen.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: martin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/16 23:40:36 by martin            #+#    #+#             */
-/*   Updated: 2020/10/16 23:40:38 by martin           ###   ########.fr       */
+/*   Updated: 2021/10/06 17:28:22 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_uint_tablen(unsigned int **tab)
+int	ft_uint_tablen(unsigned int **tab)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (tab && tab[i] != NULL)

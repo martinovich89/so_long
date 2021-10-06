@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhenry <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 09:06:27 by mhenry            #+#    #+#             */
-/*   Updated: 2019/11/14 14:05:07 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/06 16:40:00 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int		ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	int				i;
 	long long int	result;

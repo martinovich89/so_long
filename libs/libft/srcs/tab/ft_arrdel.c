@@ -6,23 +6,23 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 17:18:47 by mhenry            #+#    #+#             */
-/*   Updated: 2021/10/01 16:27:51 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/06 17:21:48 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void    ft_arrdel(void ***arr)
+void	ft_arrdel(void ***arr)
 {
-    size_t i;
+	size_t	i;
 
-    i = 0;
-    while ((*arr)[i])
-    {
-        free((*arr)[i]);
-        (*arr)[i] = NULL;
-        i++;
-    }
-    free(*arr);
-    *arr = NULL;
+	i = 0;
+	while ((*arr)[i])
+	{
+		free((*arr)[i]);
+		(*arr)[i] = NULL;
+		i++;
+	}
+	free(*arr);
+	*arr = NULL;
 }

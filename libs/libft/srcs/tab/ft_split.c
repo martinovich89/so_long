@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 10:57:36 by mhenry            #+#    #+#             */
-/*   Updated: 2021/10/01 11:53:31 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/06 17:27:24 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 
 static int	ft_tab_len(char const *s, char c)
 {
-	int count;
-	int i;
+	int	count;
+	int	i;
 
 	count = 0;
 	i = 0;
@@ -35,9 +35,9 @@ static int	ft_tab_len(char const *s, char c)
 
 static int	fill_split(char **tab, char const *s, char c, int len)
 {
-	int i;
-	int j;
-	int flag;
+	int	i;
+	int	j;
+	int	flag;
 
 	i = 0;
 	j = 0;
@@ -50,14 +50,15 @@ static int	fill_split(char **tab, char const *s, char c, int len)
 			flag = j;
 		while (s[j] != c && s[j])
 			j++;
-		if (!(tab[i] = ft_strndup(s + flag, (j - flag))))
+		tab[i] = ft_strndup(s + flag, (j - flag));
+		if (!tab[i])
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-char		**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	char	**tab;
 	int		len;
@@ -65,7 +66,8 @@ char		**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	len = ft_tab_len(s, c);
-	if (!(tab = malloc(sizeof(char *) * (len + 1))))
+	tab = malloc(sizeof(char *) * (len + 1));
+	if (!tab)
 		return (NULL);
 	ft_memset(tab, 0, sizeof(char *) * len);
 	if (fill_split(tab, s, c, len))

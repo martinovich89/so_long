@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_skip_alpha.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: martin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/16 23:44:29 by martin            #+#    #+#             */
-/*   Updated: 2020/10/16 23:44:30 by martin           ###   ########.fr       */
+/*   Updated: 2021/10/06 16:52:07 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_skip_alpha(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i] && ft_isalpha(str[i]))

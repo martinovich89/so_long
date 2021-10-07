@@ -37,9 +37,9 @@ int	key_release(int keycode, t_env *env)
 {
 	if (keycode == 65307)
 		close_window(env);
-	if (keycode == 119)
+	if (keycode == 122)
 		env->up = 0;
-	if (keycode == 97)
+	if (keycode == 113)
 		env->left = 0;
 	if (keycode == 100)
 		env->right = 0;

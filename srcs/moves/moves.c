@@ -14,10 +14,11 @@
 
 void	move_left(t_env *env, int *left)
 {
-	env->end_level = (env->conf->map[env->hero_pos[1]][env->hero_pos[0] - 1]
-			== 'E');
-	if (env->conf->map[env->hero_pos[1]][env->hero_pos[0] - 1] != '1')
+	if (is_walkable(
+			env, env->conf->map[env->hero_pos[1]][env->hero_pos[0] - 1]))
 	{
+		env->end_level = (env->conf->map[env->hero_pos[1]][env->hero_pos[0] - 1]
+				== 'E');
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[0]--;
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
@@ -25,21 +26,17 @@ void	move_left(t_env *env, int *left)
 		env->move_count++;
 		display_move_count(env);
 		next_hero(env);
-		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
-		{
-			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
-			env->collectibles++;
-		}
 	}
 	*left = 0;
 }
 
 void	move_right(t_env *env, int *right)
 {
-	env->end_level = (env->conf->map[env->hero_pos[1]][env->hero_pos[0] + 1]
-			== 'E');
-	if (env->conf->map[env->hero_pos[1]][env->hero_pos[0] + 1] != '1')
+	if (is_walkable(
+			env, env->conf->map[env->hero_pos[1]][env->hero_pos[0] + 1]))
 	{
+		env->end_level = (env->conf->map[env->hero_pos[1]][env->hero_pos[0] + 1]
+				== 'E');
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[0]++;
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
@@ -47,21 +44,17 @@ void	move_right(t_env *env, int *right)
 		env->move_count++;
 		display_move_count(env);
 		next_hero(env);
-		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
-		{
-			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
-			env->collectibles++;
-		}
 	}
 	*right = 0;
 }
 
 void	move_down(t_env *env, int *down)
 {
-	env->end_level = (env->conf->map[env->hero_pos[1] + 1][env->hero_pos[0]]
-			== 'E');
-	if (env->conf->map[env->hero_pos[1] + 1][env->hero_pos[0]] != '1')
+	if (is_walkable(
+			env, env->conf->map[env->hero_pos[1] + 1][env->hero_pos[0]]))
 	{
+		env->end_level = (env->conf->map[env->hero_pos[1] + 1][env->hero_pos[0]]
+				== 'E');
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[1]++;
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
@@ -69,21 +62,17 @@ void	move_down(t_env *env, int *down)
 		env->move_count++;
 		display_move_count(env);
 		next_hero(env);
-		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
-		{
-			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
-			env->collectibles++;
-		}
 	}
 	*down = 0;
 }
 
 void	move_up(t_env *env, int *up)
 {
-	env->end_level = (env->conf->map[env->hero_pos[1] - 1][env->hero_pos[0]]
-			== 'E');
-	if (env->conf->map[env->hero_pos[1] - 1][env->hero_pos[0]] != '1')
+	if (is_walkable(
+			env, env->conf->map[env->hero_pos[1] - 1][env->hero_pos[0]]))
 	{
+		env->end_level = (env->conf->map[env->hero_pos[1] - 1][env->hero_pos[0]]
+				== 'E');
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
 		env->hero_pos[1]--;
 		env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = 'P' + (
@@ -91,11 +80,6 @@ void	move_up(t_env *env, int *up)
 		env->move_count++;
 		display_move_count(env);
 		next_hero(env);
-		if (env->conf->map[env->hero_pos[1]][env->hero_pos[0]] == 'C')
-		{
-			env->conf->map[env->hero_pos[1]][env->hero_pos[0]] = '0';
-			env->collectibles++;
-		}
 	}
 	*up = 0;
 }

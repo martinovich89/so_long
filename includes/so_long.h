@@ -62,6 +62,7 @@ typedef struct s_env
 	int				hero_pos[2];
 	size_t			move_count;
 	size_t			collectibles;
+	size_t			collected;
 	void			*mlx;
 	void			*win;
 	int				end_level;
@@ -72,6 +73,7 @@ typedef struct s_env
 	int				down;
 }				t_env;
 
+int		is_walkable(t_env *env, char c);
 void	ft_error(char *str, t_env *env);
 int		key_press(int keycode, t_env *env);
 int		key_release(int keycode, t_env *env);

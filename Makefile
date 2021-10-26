@@ -75,6 +75,7 @@ clean:
 
 fclean: clean
 		make $@ -C libs/libft
+		$(RM) ./libs/libft.a ./libs/libmlx.a
 		$(RM) $(NAME)
 		echo "$(NAME) deleted"
 

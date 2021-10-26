@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 13:47:53 by mhenry            #+#    #+#             */
-/*   Updated: 2021/10/06 23:20:22 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/10/26 15:11:46 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	map_len(t_env *env, int fd)
 
 	i = 0;
 	max = 0;
+	line = NULL;
 	while (get_next_line(fd, &line) > 0)
 	{
 		if (max < ft_strlen(line))
@@ -53,7 +54,7 @@ void	parse_map(t_env *env)
 			ft_error("Failed allocation\n", env);
 		i++;
 	}
-	if (env->conf->map + i && !env->conf->map[i][0])
+	if (*(env->conf->map + i) && !env->conf->map[i][0])
 		ft_memdel((void **)env->conf->map + i);
 	get_next_line(-1, NULL);
 	close(fd);

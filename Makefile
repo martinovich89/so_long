@@ -65,7 +65,7 @@ $(NAME): $(OBJS)
 		echo "$(NAME) created"
 
 %.o: %.c
-	$(CC) $(FLAGS) $(INC) -o $@ -c $<
+	$(CC) $(FLAGSD) $(INC) -o $@ -c $<
 
 clean:
 		make $@ -C libs/libft

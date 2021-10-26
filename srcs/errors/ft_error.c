@@ -19,7 +19,7 @@ void	ft_puterr(char *str)
 
 void	ft_error(char *str, t_env *env)
 {
-	write(2, "error: ", 7);
+	write(2, "Error\n", 6);
 	ft_puterr(str);
 	ft_clear_env(env);
 	exit(1);

@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 13:13:18 by mhenry            #+#    #+#             */
-/*   Updated: 2021/10/06 15:23:29 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/11/01 11:50:24 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ void	check_fd(char **argv, t_env *env)
 	line = (ft_strrchr(argv[1], '.'));
 	if (line != NULL)
 	{
-		if (ft_strncmp(line, ".ber", 4) != 0)
-			ft_error("Wrong file extension, please use .cub\n", env);
+		if (ft_strcmp(line, ".ber") != 0)
+			ft_error("Wrong file extension, please use .ber\n", env);
 	}
 	else
-		ft_error("Wrong file extension, please use .cub\n", env);
+		ft_error("Wrong file extension, please use .ber\n", env);
 	close(fd);
 }

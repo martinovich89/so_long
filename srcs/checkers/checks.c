@@ -6,7 +6,7 @@
 /*   By: mhenry <mhenry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 13:13:18 by mhenry            #+#    #+#             */
-/*   Updated: 2021/11/01 11:50:24 by mhenry           ###   ########.fr       */
+/*   Updated: 2021/11/01 12:35:05 by mhenry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	check_map(t_env *env)
 void	check_args(int argc, t_env *env)
 {
 	if (argc != 2)
-		ft_error("Error: Program must be launched with 2 arguments\n", env);
+		ft_error("Program must be launched with 2 arguments\n", env);
 }
 
 void	check_fd(char **argv, t_env *env)

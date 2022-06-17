@@ -53,7 +53,7 @@ typedef struct s_conf
 typedef struct s_env
 {
 	t_conf			*conf;
-	t_data			img;
+	t_data			*img;
 	t_data			tex[7];
 	t_data			end;
 	t_data			*cur_tex;

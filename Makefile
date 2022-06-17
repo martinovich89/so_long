@@ -1,46 +1,13 @@
-NAME		=	so_long
+NAME		=	test
 
 LIB			=	-L./libs/libft -lft -L./libs/mlx -lm -lX11 -lbsd -lXext -lmlx
 INC			=	-I./includes -I./libs/mlx
 
-PARSING		=	parsing/parsing.c
 
-RNDR		=	rndr/image.c \
-				rndr/image_utils.c
-
-MOVES		=	moves/moves.c
-
-SETTERS		=	setters/setters.c
-
-UTILS		=	utils/clear.c \
-				utils/game_utils.c
-
-CHECKERS	=	checkers/checks.c \
-				checkers/checks_utils.c
-
-GNL			=	get_next_line/get_next_line.c \
-				get_next_line/get_next_line_utils.c \
-				get_next_line/get_next_line_utils2.c
-
-ERRORS		=	errors/ft_error.c 
-
-INPUTS		=	inputs/inputs.c 
-
-INITS		=	inits/inits.c
 
 SRC_PATH	=	./srcs/
 
-SRC			=	$(GNL) \
-				$(ERRORS) \
-				$(INPUTS) \
-				$(INITS) \
-				$(MOVES) \
-				$(PARSING) \
-				$(RNDR) \
-				$(SETTERS) \
-				$(CHECKERS) \
-				$(UTILS) \
-				main.c
+SRC			=	malloc_runtime.c
 
 SRCS		=	$(addprefix $(SRC_PATH), $(SRC))
 
